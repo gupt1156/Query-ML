@@ -1,0 +1,1176 @@
+INPUT: Car #1 has 4 cylinders, medium horsepower, medium displacement, average weight, and moderate acceleration.
+ANSWER: Car #1 has good fuel efficiency.
+---
+INPUT: Car #2 has slow acceleration, light weight, low displacement, 4 cylinders, and low horsepower.
+ANSWER: Car #2 has good fuel efficiency.
+---
+INPUT: Car #3 has moderate acceleration, 4 cylinders, low displacement, low horsepower, and light weight.
+ANSWER: Car #3 has good fuel efficiency.
+---
+INPUT: Car #4 has fast acceleration, low displacement, 4 cylinders, light weight, and low horsepower.
+ANSWER: Car #4 has good fuel efficiency.
+---
+INPUT: Car #5 has medium horsepower, fast acceleration, medium displacement, average weight, and 6 cylinders.
+ANSWER: Car #5 has bad fuel efficiency.
+---
+INPUT: Car #6 has 8 cylinders, high horsepower, heavy weight, high displacement, and slow acceleration.
+ANSWER: Car #6 has bad fuel efficiency.
+---
+INPUT: Car #7 has slow acceleration, high horsepower, high displacement, 8 cylinders, and heavy weight.
+ANSWER: Car #7 has bad fuel efficiency.
+---
+INPUT: Car #8 has medium horsepower, 6 cylinders, average weight, fast acceleration, and medium displacement.
+ANSWER: Car #8 has bad fuel efficiency.
+---
+INPUT: Car #9 has low horsepower, 6 cylinders, heavy weight, fast acceleration, and high displacement.
+ANSWER: Car #9 has bad fuel efficiency.
+---
+INPUT: Car #10 has light weight, medium horsepower, low displacement, 4 cylinders, and moderate acceleration.
+ANSWER: Car #10 has good fuel efficiency.
+---
+INPUT: Car #11 has high displacement, high horsepower, 8 cylinders, heavy weight, and slow acceleration.
+ANSWER: Car #11 has bad fuel efficiency.
+---
+INPUT: Car #12 has medium horsepower, medium displacement, 6 cylinders, heavy weight, and fast acceleration.
+ANSWER: Car #12 has bad fuel efficiency.
+---
+INPUT: Car #13 has low horsepower, low displacement, fast acceleration, light weight, and 4 cylinders.
+ANSWER: Car #13 has good fuel efficiency.
+---
+INPUT: Car #14 has high horsepower, 6 cylinders, slow acceleration, medium displacement, and average weight.
+ANSWER: Car #14 has good fuel efficiency.
+---
+INPUT: Car #15 has medium displacement, fast acceleration, medium horsepower, heavy weight, and 6 cylinders.
+ANSWER: Car #15 has bad fuel efficiency.
+---
+INPUT: Car #16 has high displacement, high horsepower, moderate acceleration, 8 cylinders, and heavy weight.
+ANSWER: Car #16 has bad fuel efficiency.
+---
+INPUT: Car #17 has medium horsepower, average weight, 4 cylinders, fast acceleration, and medium displacement.
+ANSWER: Car #17 has good fuel efficiency.
+---
+INPUT: Car #18 has moderate acceleration, medium horsepower, average weight, 4 cylinders, and medium displacement.
+ANSWER: Car #18 has good fuel efficiency.
+---
+INPUT: Car #19 has moderate acceleration, high displacement, high horsepower, 8 cylinders, and heavy weight.
+ANSWER: Car #19 has bad fuel efficiency.
+---
+INPUT: Car #20 has medium displacement, medium horsepower, 6 cylinders, average weight, and slow acceleration.
+ANSWER: Car #20 has bad fuel efficiency.
+---
+INPUT: Car #21 has moderate acceleration, medium displacement, medium horsepower, 4 cylinders, and average weight.
+ANSWER: Car #21 has good fuel efficiency.
+---
+INPUT: Car #22 has fast acceleration, 6 cylinders, high displacement, heavy weight, and high horsepower.
+ANSWER: Car #22 has bad fuel efficiency.
+---
+INPUT: Car #23 has average weight, medium displacement, high horsepower, slow acceleration, and 6 cylinders.
+ANSWER: Car #23 has good fuel efficiency.
+---
+INPUT: Car #24 has heavy weight, high displacement, high horsepower, 8 cylinders, and slow acceleration.
+ANSWER: Car #24 has bad fuel efficiency.
+---
+INPUT: Car #25 has 4 cylinders, fast acceleration, light weight, low displacement, and low horsepower.
+ANSWER: Car #25 has good fuel efficiency.
+---
+INPUT: Car #26 has low displacement, 4 cylinders, moderate acceleration, light weight, and low horsepower.
+ANSWER: Car #26 has good fuel efficiency.
+---
+INPUT: Car #27 has low displacement, 4 cylinders, low horsepower, slow acceleration, and light weight.
+ANSWER: Car #27 has good fuel efficiency.
+---
+INPUT: Car #28 has 8 cylinders, high horsepower, heavy weight, slow acceleration, and high displacement.
+ANSWER: Car #28 has bad fuel efficiency.
+---
+INPUT: Car #29 has low displacement, light weight, low horsepower, 4 cylinders, and fast acceleration.
+ANSWER: Car #29 has good fuel efficiency.
+---
+INPUT: Car #30 has 8 cylinders, high displacement, heavy weight, high horsepower, and slow acceleration.
+ANSWER: Car #30 has bad fuel efficiency.
+---
+INPUT: Car #31 has low displacement, 4 cylinders, light weight, moderate acceleration, and medium horsepower.
+ANSWER: Car #31 has good fuel efficiency.
+---
+INPUT: Car #32 has 6 cylinders, moderate acceleration, medium horsepower, high displacement, and average weight.
+ANSWER: Car #32 has bad fuel efficiency.
+---
+INPUT: Car #33 has medium displacement, slow acceleration, average weight, medium horsepower, and 4 cylinders.
+ANSWER: Car #33 has good fuel efficiency.
+---
+INPUT: Car #34 has moderate acceleration, low displacement, low horsepower, 4 cylinders, and light weight.
+ANSWER: Car #34 has good fuel efficiency.
+---
+INPUT: Car #35 has 8 cylinders, high displacement, high horsepower, heavy weight, and slow acceleration.
+ANSWER: Car #35 has bad fuel efficiency.
+---
+INPUT: Car #36 has high displacement, high horsepower, heavy weight, slow acceleration, and 8 cylinders.
+ANSWER: Car #36 has bad fuel efficiency.
+---
+INPUT: Car #37 has high displacement, slow acceleration, 8 cylinders, heavy weight, and high horsepower.
+ANSWER: Car #37 has bad fuel efficiency.
+---
+INPUT: Car #38 has high displacement, heavy weight, high horsepower, slow acceleration, and 8 cylinders.
+ANSWER: Car #38 has bad fuel efficiency.
+---
+INPUT: Car #39 has low horsepower, 4 cylinders, medium displacement, average weight, and moderate acceleration.
+ANSWER: Car #39 has good fuel efficiency.
+---
+INPUT: Car #40 has average weight, medium horsepower, slow acceleration, 6 cylinders, and medium displacement.
+ANSWER: Car #40 has bad fuel efficiency.
+---
+INPUT: Car #41 has low horsepower, low displacement, 4 cylinders, fast acceleration, and light weight.
+ANSWER: Car #41 has good fuel efficiency.
+---
+INPUT: Car #42 has 8 cylinders, slow acceleration, high displacement, high horsepower, and heavy weight.
+ANSWER: Car #42 has bad fuel efficiency.
+---
+INPUT: Car #43 has 6 cylinders, average weight, moderate acceleration, medium displacement, and medium horsepower.
+ANSWER: Car #43 has bad fuel efficiency.
+---
+INPUT: Car #44 has low horsepower, 4 cylinders, fast acceleration, light weight, and low displacement.
+ANSWER: Car #44 has good fuel efficiency.
+---
+INPUT: Car #45 has heavy weight, high horsepower, 8 cylinders, high displacement, and slow acceleration.
+ANSWER: Car #45 has bad fuel efficiency.
+---
+INPUT: Car #46 has 4 cylinders, light weight, low displacement, low horsepower, and slow acceleration.
+ANSWER: Car #46 has good fuel efficiency.
+---
+INPUT: Car #47 has medium displacement, fast acceleration, medium horsepower, 6 cylinders, and heavy weight.
+ANSWER: Car #47 has bad fuel efficiency.
+---
+INPUT: Car #48 has high horsepower, heavy weight, moderate acceleration, 8 cylinders, and high displacement.
+ANSWER: Car #48 has bad fuel efficiency.
+---
+INPUT: Car #49 has medium displacement, slow acceleration, high horsepower, average weight, and 6 cylinders.
+ANSWER: Car #49 has good fuel efficiency.
+---
+INPUT: Car #50 has 4 cylinders, moderate acceleration, medium displacement, average weight, and medium horsepower.
+ANSWER: Car #50 has good fuel efficiency.
+---
+INPUT: Car #51 has slow acceleration, high displacement, high horsepower, average weight, and 8 cylinders.
+ANSWER: Car #51 has bad fuel efficiency.
+---
+INPUT: Car #52 has fast acceleration, low displacement, low horsepower, light weight, and 4 cylinders.
+ANSWER: Car #52 has good fuel efficiency.
+---
+INPUT: Car #53 has 4 cylinders, fast acceleration, low displacement, light weight, and low horsepower.
+ANSWER: Car #53 has good fuel efficiency.
+---
+INPUT: Car #54 has light weight, slow acceleration, 3 cylinders, low displacement, and medium horsepower.
+ANSWER: Car #54 has bad fuel efficiency.
+---
+INPUT: Car #55 has 8 cylinders, high horsepower, slow acceleration, heavy weight, and high displacement.
+ANSWER: Car #55 has bad fuel efficiency.
+---
+INPUT: Car #56 has light weight, 4 cylinders, low displacement, fast acceleration, and low horsepower.
+ANSWER: Car #56 has good fuel efficiency.
+---
+INPUT: Car #57 has low horsepower, low displacement, light weight, fast acceleration, and 4 cylinders.
+ANSWER: Car #57 has good fuel efficiency.
+---
+INPUT: Car #58 has 8 cylinders, heavy weight, high displacement, high horsepower, and fast acceleration.
+ANSWER: Car #58 has bad fuel efficiency.
+---
+INPUT: Car #59 has light weight, 4 cylinders, fast acceleration, medium displacement, and medium horsepower.
+ANSWER: Car #59 has bad fuel efficiency.
+---
+INPUT: Car #60 has low displacement, 4 cylinders, light weight, medium horsepower, and fast acceleration.
+ANSWER: Car #60 has bad fuel efficiency.
+---
+INPUT: Car #61 has medium displacement, medium horsepower, average weight, 4 cylinders, and fast acceleration.
+ANSWER: Car #61 has good fuel efficiency.
+---
+INPUT: Car #62 has low displacement, low horsepower, moderate acceleration, light weight, and 4 cylinders.
+ANSWER: Car #62 has good fuel efficiency.
+---
+INPUT: Car #63 has moderate acceleration, low displacement, light weight, low horsepower, and 4 cylinders.
+ANSWER: Car #63 has good fuel efficiency.
+---
+INPUT: Car #64 has average weight, moderate acceleration, medium displacement, medium horsepower, and 6 cylinders.
+ANSWER: Car #64 has bad fuel efficiency.
+---
+INPUT: Car #65 has light weight, low horsepower, 4 cylinders, moderate acceleration, and low displacement.
+ANSWER: Car #65 has good fuel efficiency.
+---
+INPUT: Car #66 has medium displacement, 6 cylinders, average weight, high horsepower, and slow acceleration.
+ANSWER: Car #66 has good fuel efficiency.
+---
+INPUT: Car #67 has high horsepower, average weight, medium displacement, 6 cylinders, and moderate acceleration.
+ANSWER: Car #67 has bad fuel efficiency.
+---
+INPUT: Car #68 has medium horsepower, 4 cylinders, slow acceleration, light weight, and low displacement.
+ANSWER: Car #68 has good fuel efficiency.
+---
+INPUT: Car #69 has heavy weight, moderate acceleration, high displacement, high horsepower, and 8 cylinders.
+ANSWER: Car #69 has bad fuel efficiency.
+---
+INPUT: Car #70 has 8 cylinders, high horsepower, heavy weight, slow acceleration, and high displacement.
+ANSWER: Car #70 has bad fuel efficiency.
+---
+INPUT: Car #71 has average weight, fast acceleration, low horsepower, medium displacement, and 4 cylinders.
+ANSWER: Car #71 has bad fuel efficiency.
+---
+INPUT: Car #72 has low horsepower, light weight, low displacement, 4 cylinders, and slow acceleration.
+ANSWER: Car #72 has good fuel efficiency.
+---
+INPUT: Car #73 has light weight, 4 cylinders, moderate acceleration, low displacement, and low horsepower.
+ANSWER: Car #73 has good fuel efficiency.
+---
+INPUT: Car #74 has average weight, 4 cylinders, fast acceleration, low displacement, and medium horsepower.
+ANSWER: Car #74 has good fuel efficiency.
+---
+INPUT: Car #75 has high horsepower, high displacement, 8 cylinders, fast acceleration, and heavy weight.
+ANSWER: Car #75 has good fuel efficiency.
+---
+INPUT: Car #76 has low displacement, fast acceleration, light weight, low horsepower, and 4 cylinders.
+ANSWER: Car #76 has good fuel efficiency.
+---
+INPUT: Car #77 has light weight, low horsepower, low displacement, 4 cylinders, and moderate acceleration.
+ANSWER: Car #77 has good fuel efficiency.
+---
+INPUT: Car #78 has 4 cylinders, medium displacement, medium horsepower, fast acceleration, and average weight.
+ANSWER: Car #78 has bad fuel efficiency.
+---
+INPUT: Car #79 has slow acceleration, heavy weight, high displacement, high horsepower, and 8 cylinders.
+ANSWER: Car #79 has bad fuel efficiency.
+---
+INPUT: Car #80 has average weight, moderate acceleration, medium horsepower, medium displacement, and 6 cylinders.
+ANSWER: Car #80 has bad fuel efficiency.
+---
+INPUT: Car #81 has fast acceleration, 4 cylinders, low horsepower, medium displacement, and average weight.
+ANSWER: Car #81 has good fuel efficiency.
+---
+INPUT: Car #82 has medium displacement, 6 cylinders, average weight, moderate acceleration, and medium horsepower.
+ANSWER: Car #82 has bad fuel efficiency.
+---
+INPUT: Car #83 has heavy weight, slow acceleration, 8 cylinders, high displacement, and high horsepower.
+ANSWER: Car #83 has bad fuel efficiency.
+---
+INPUT: Car #84 has 8 cylinders, high horsepower, high displacement, heavy weight, and slow acceleration.
+ANSWER: Car #84 has bad fuel efficiency.
+---
+INPUT: Car #85 has high displacement, high horsepower, 8 cylinders, moderate acceleration, and heavy weight.
+ANSWER: Car #85 has bad fuel efficiency.
+---
+INPUT: Car #86 has high displacement, high horsepower, average weight, slow acceleration, and 6 cylinders.
+ANSWER: Car #86 has bad fuel efficiency.
+---
+INPUT: Car #87 has high displacement, high horsepower, heavy weight, slow acceleration, and 8 cylinders.
+ANSWER: Car #87 has bad fuel efficiency.
+---
+INPUT: Car #88 has low horsepower, low displacement, 4 cylinders, fast acceleration, and light weight.
+ANSWER: Car #88 has good fuel efficiency.
+---
+INPUT: Car #89 has 8 cylinders, high horsepower, heavy weight, moderate acceleration, and high displacement.
+ANSWER: Car #89 has bad fuel efficiency.
+---
+INPUT: Car #90 has 4 cylinders, light weight, fast acceleration, low displacement, and medium horsepower.
+ANSWER: Car #90 has good fuel efficiency.
+---
+INPUT: Car #91 has light weight, low horsepower, fast acceleration, 4 cylinders, and low displacement.
+ANSWER: Car #91 has good fuel efficiency.
+---
+INPUT: Car #92 has light weight, low horsepower, 4 cylinders, low displacement, and fast acceleration.
+ANSWER: Car #92 has good fuel efficiency.
+---
+INPUT: Car #93 has low displacement, light weight, 4 cylinders, low horsepower, and fast acceleration.
+ANSWER: Car #93 has good fuel efficiency.
+---
+INPUT: Car #94 has 8 cylinders, slow acceleration, heavy weight, high horsepower, and high displacement.
+ANSWER: Car #94 has bad fuel efficiency.
+---
+INPUT: Car #95 has low displacement, fast acceleration, light weight, low horsepower, and 4 cylinders.
+ANSWER: Car #95 has good fuel efficiency.
+---
+INPUT: Car #96 has moderate acceleration, 4 cylinders, low displacement, low horsepower, and light weight.
+ANSWER: Car #96 has good fuel efficiency.
+---
+INPUT: Car #97 has low displacement, fast acceleration, light weight, low horsepower, and 4 cylinders.
+ANSWER: Car #97 has good fuel efficiency.
+---
+INPUT: Car #98 has light weight, 4 cylinders, low horsepower, fast acceleration, and low displacement.
+ANSWER: Car #98 has good fuel efficiency.
+---
+INPUT: Car #99 has slow acceleration, high horsepower, heavy weight, 8 cylinders, and high displacement.
+ANSWER: Car #99 has bad fuel efficiency.
+---
+INPUT: Car #100 has fast acceleration, low displacement, 4 cylinders, medium horsepower, and light weight.
+ANSWER: Car #100 has bad fuel efficiency.
+---
+INPUT: Car #101 has medium displacement, medium horsepower, fast acceleration, average weight, and 4 cylinders.
+ANSWER: Car #101 has good fuel efficiency.
+---
+INPUT: Car #102 has fast acceleration, low horsepower, light weight, low displacement, and 4 cylinders.
+ANSWER: Car #102 has good fuel efficiency.
+---
+INPUT: Car #103 has fast acceleration, average weight, medium horsepower, 6 cylinders, and high displacement.
+ANSWER: Car #103 has bad fuel efficiency.
+---
+INPUT: Car #104 has medium displacement, 4 cylinders, medium horsepower, slow acceleration, and average weight.
+ANSWER: Car #104 has good fuel efficiency.
+---
+INPUT: Car #105 has heavy weight, high displacement, medium horsepower, fast acceleration, and 6 cylinders.
+ANSWER: Car #105 has bad fuel efficiency.
+---
+INPUT: Car #106 has heavy weight, 8 cylinders, high horsepower, high displacement, and slow acceleration.
+ANSWER: Car #106 has bad fuel efficiency.
+---
+INPUT: Car #107 has low horsepower, low displacement, 4 cylinders, light weight, and moderate acceleration.
+ANSWER: Car #107 has good fuel efficiency.
+---
+INPUT: Car #108 has slow acceleration, 8 cylinders, high horsepower, high displacement, and heavy weight.
+ANSWER: Car #108 has bad fuel efficiency.
+---
+INPUT: Car #109 has 4 cylinders, moderate acceleration, low displacement, light weight, and low horsepower.
+ANSWER: Car #109 has good fuel efficiency.
+---
+INPUT: Car #110 has heavy weight, high displacement, 8 cylinders, slow acceleration, and high horsepower.
+ANSWER: Car #110 has bad fuel efficiency.
+---
+INPUT: Car #111 has slow acceleration, 8 cylinders, high horsepower, high displacement, and average weight.
+ANSWER: Car #111 has bad fuel efficiency.
+---
+INPUT: Car #112 has low displacement, 4 cylinders, light weight, moderate acceleration, and low horsepower.
+ANSWER: Car #112 has good fuel efficiency.
+---
+INPUT: Car #113 has moderate acceleration, 4 cylinders, light weight, low displacement, and low horsepower.
+ANSWER: Car #113 has good fuel efficiency.
+---
+INPUT: Car #114 has low displacement, average weight, moderate acceleration, 4 cylinders, and medium horsepower.
+ANSWER: Car #114 has good fuel efficiency.
+---
+INPUT: Car #115 has slow acceleration, high displacement, heavy weight, 8 cylinders, and high horsepower.
+ANSWER: Car #115 has bad fuel efficiency.
+---
+INPUT: Car #116 has low horsepower, 4 cylinders, light weight, fast acceleration, and low displacement.
+ANSWER: Car #116 has good fuel efficiency.
+---
+INPUT: Car #117 has heavy weight, slow acceleration, 8 cylinders, high horsepower, and high displacement.
+ANSWER: Car #117 has bad fuel efficiency.
+---
+INPUT: Car #118 has fast acceleration, 4 cylinders, low displacement, light weight, and low horsepower.
+ANSWER: Car #118 has good fuel efficiency.
+---
+INPUT: Car #119 has heavy weight, slow acceleration, 8 cylinders, high displacement, and high horsepower.
+ANSWER: Car #119 has bad fuel efficiency.
+---
+INPUT: Car #120 has slow acceleration, average weight, medium horsepower, low displacement, and 3 cylinders.
+ANSWER: Car #120 has good fuel efficiency.
+---
+INPUT: Car #121 has high horsepower, slow acceleration, 8 cylinders, high displacement, and heavy weight.
+ANSWER: Car #121 has bad fuel efficiency.
+---
+INPUT: Car #122 has 8 cylinders, slow acceleration, heavy weight, high horsepower, and high displacement.
+ANSWER: Car #122 has bad fuel efficiency.
+---
+INPUT: Car #123 has average weight, 4 cylinders, medium displacement, slow acceleration, and high horsepower.
+ANSWER: Car #123 has bad fuel efficiency.
+---
+INPUT: Car #124 has low displacement, 4 cylinders, fast acceleration, light weight, and medium horsepower.
+ANSWER: Car #124 has good fuel efficiency.
+---
+INPUT: Car #125 has low displacement, average weight, moderate acceleration, medium horsepower, and 4 cylinders.
+ANSWER: Car #125 has good fuel efficiency.
+---
+INPUT: Car #126 has light weight, 4 cylinders, medium horsepower, fast acceleration, and medium displacement.
+ANSWER: Car #126 has bad fuel efficiency.
+---
+INPUT: Car #127 has slow acceleration, 8 cylinders, high horsepower, high displacement, and heavy weight.
+ANSWER: Car #127 has bad fuel efficiency.
+---
+INPUT: Car #128 has low horsepower, fast acceleration, 4 cylinders, average weight, and medium displacement.
+ANSWER: Car #128 has good fuel efficiency.
+---
+INPUT: Car #129 has high horsepower, high displacement, heavy weight, 8 cylinders, and slow acceleration.
+ANSWER: Car #129 has bad fuel efficiency.
+---
+INPUT: Car #130 has slow acceleration, medium horsepower, average weight, low displacement, and 4 cylinders.
+ANSWER: Car #130 has bad fuel efficiency.
+---
+INPUT: Car #131 has high horsepower, 8 cylinders, moderate acceleration, heavy weight, and high displacement.
+ANSWER: Car #131 has bad fuel efficiency.
+---
+INPUT: Car #132 has high displacement, fast acceleration, 6 cylinders, average weight, and medium horsepower.
+ANSWER: Car #132 has bad fuel efficiency.
+---
+INPUT: Car #133 has slow acceleration, heavy weight, high horsepower, 8 cylinders, and high displacement.
+ANSWER: Car #133 has bad fuel efficiency.
+---
+INPUT: Car #134 has 4 cylinders, medium horsepower, moderate acceleration, light weight, and medium displacement.
+ANSWER: Car #134 has good fuel efficiency.
+---
+INPUT: Car #135 has heavy weight, medium horsepower, 8 cylinders, fast acceleration, and high displacement.
+ANSWER: Car #135 has good fuel efficiency.
+---
+INPUT: Car #136 has high horsepower, 6 cylinders, high displacement, heavy weight, and moderate acceleration.
+ANSWER: Car #136 has bad fuel efficiency.
+---
+INPUT: Car #137 has 4 cylinders, fast acceleration, medium displacement, low horsepower, and average weight.
+ANSWER: Car #137 has bad fuel efficiency.
+---
+INPUT: Car #138 has medium horsepower, 6 cylinders, average weight, moderate acceleration, and medium displacement.
+ANSWER: Car #138 has bad fuel efficiency.
+---
+INPUT: Car #139 has 4 cylinders, fast acceleration, average weight, low horsepower, and medium displacement.
+ANSWER: Car #139 has good fuel efficiency.
+---
+INPUT: Car #140 has heavy weight, 8 cylinders, moderate acceleration, high displacement, and high horsepower.
+ANSWER: Car #140 has bad fuel efficiency.
+---
+INPUT: Car #141 has average weight, medium displacement, moderate acceleration, 4 cylinders, and low horsepower.
+ANSWER: Car #141 has good fuel efficiency.
+---
+INPUT: Car #142 has average weight, 4 cylinders, fast acceleration, medium displacement, and low horsepower.
+ANSWER: Car #142 has good fuel efficiency.
+---
+INPUT: Car #143 has medium displacement, high horsepower, 4 cylinders, average weight, and moderate acceleration.
+ANSWER: Car #143 has bad fuel efficiency.
+---
+INPUT: Car #144 has medium horsepower, average weight, high displacement, 6 cylinders, and fast acceleration.
+ANSWER: Car #144 has bad fuel efficiency.
+---
+INPUT: Car #145 has 4 cylinders, fast acceleration, medium horsepower, average weight, and medium displacement.
+ANSWER: Car #145 has bad fuel efficiency.
+---
+INPUT: Car #146 has average weight, medium displacement, slow acceleration, 4 cylinders, and medium horsepower.
+ANSWER: Car #146 has good fuel efficiency.
+---
+INPUT: Car #147 has high displacement, high horsepower, 8 cylinders, moderate acceleration, and heavy weight.
+ANSWER: Car #147 has bad fuel efficiency.
+---
+INPUT: Car #148 has medium horsepower, average weight, 6 cylinders, moderate acceleration, and medium displacement.
+ANSWER: Car #148 has bad fuel efficiency.
+---
+INPUT: Car #149 has 8 cylinders, heavy weight, high displacement, high horsepower, and slow acceleration.
+ANSWER: Car #149 has bad fuel efficiency.
+---
+INPUT: Car #150 has medium displacement, 5 cylinders, average weight, low horsepower, and fast acceleration.
+ANSWER: Car #150 has good fuel efficiency.
+---
+INPUT: Car #151 has moderate acceleration, low displacement, light weight, 4 cylinders, and low horsepower.
+ANSWER: Car #151 has good fuel efficiency.
+---
+INPUT: Car #152 has moderate acceleration, low displacement, low horsepower, 4 cylinders, and light weight.
+ANSWER: Car #152 has good fuel efficiency.
+---
+INPUT: Car #153 has low displacement, moderate acceleration, 4 cylinders, light weight, and low horsepower.
+ANSWER: Car #153 has good fuel efficiency.
+---
+INPUT: Car #154 has high displacement, 8 cylinders, slow acceleration, heavy weight, and high horsepower.
+ANSWER: Car #154 has bad fuel efficiency.
+---
+INPUT: Car #155 has light weight, fast acceleration, low horsepower, low displacement, and 4 cylinders.
+ANSWER: Car #155 has good fuel efficiency.
+---
+INPUT: Car #156 has moderate acceleration, light weight, low horsepower, 4 cylinders, and low displacement.
+ANSWER: Car #156 has good fuel efficiency.
+---
+INPUT: Car #157 has heavy weight, 6 cylinders, fast acceleration, high horsepower, and medium displacement.
+ANSWER: Car #157 has bad fuel efficiency.
+---
+INPUT: Car #158 has low horsepower, light weight, low displacement, 4 cylinders, and moderate acceleration.
+ANSWER: Car #158 has good fuel efficiency.
+---
+INPUT: Car #159 has average weight, medium displacement, 6 cylinders, high horsepower, and slow acceleration.
+ANSWER: Car #159 has good fuel efficiency.
+---
+INPUT: Car #160 has moderate acceleration, medium horsepower, 6 cylinders, high displacement, and average weight.
+ANSWER: Car #160 has bad fuel efficiency.
+---
+INPUT: Car #161 has medium horsepower, medium displacement, average weight, moderate acceleration, and 6 cylinders.
+ANSWER: Car #161 has bad fuel efficiency.
+---
+INPUT: Car #162 has slow acceleration, high horsepower, 8 cylinders, high displacement, and heavy weight.
+ANSWER: Car #162 has bad fuel efficiency.
+---
+INPUT: Car #163 has heavy weight, high horsepower, 8 cylinders, high displacement, and moderate acceleration.
+ANSWER: Car #163 has bad fuel efficiency.
+---
+INPUT: Car #164 has average weight, medium horsepower, medium displacement, 4 cylinders, and fast acceleration.
+ANSWER: Car #164 has good fuel efficiency.
+---
+INPUT: Car #165 has high displacement, moderate acceleration, heavy weight, 8 cylinders, and high horsepower.
+ANSWER: Car #165 has bad fuel efficiency.
+---
+INPUT: Car #166 has light weight, slow acceleration, low horsepower, 4 cylinders, and medium displacement.
+ANSWER: Car #166 has good fuel efficiency.
+---
+INPUT: Car #167 has moderate acceleration, 6 cylinders, medium displacement, average weight, and medium horsepower.
+ANSWER: Car #167 has bad fuel efficiency.
+---
+INPUT: Car #168 has heavy weight, medium displacement, high horsepower, fast acceleration, and 6 cylinders.
+ANSWER: Car #168 has bad fuel efficiency.
+---
+INPUT: Car #169 has moderate acceleration, light weight, medium horsepower, medium displacement, and 4 cylinders.
+ANSWER: Car #169 has good fuel efficiency.
+---
+INPUT: Car #170 has low displacement, 4 cylinders, moderate acceleration, light weight, and low horsepower.
+ANSWER: Car #170 has good fuel efficiency.
+---
+INPUT: Car #171 has fast acceleration, light weight, 4 cylinders, low horsepower, and low displacement.
+ANSWER: Car #171 has good fuel efficiency.
+---
+INPUT: Car #172 has average weight, medium displacement, 4 cylinders, medium horsepower, and fast acceleration.
+ANSWER: Car #172 has bad fuel efficiency.
+---
+INPUT: Car #173 has slow acceleration, high horsepower, high displacement, 8 cylinders, and heavy weight.
+ANSWER: Car #173 has bad fuel efficiency.
+---
+INPUT: Car #174 has medium horsepower, medium displacement, average weight, moderate acceleration, and 4 cylinders.
+ANSWER: Car #174 has bad fuel efficiency.
+---
+INPUT: Car #175 has medium displacement, moderate acceleration, 6 cylinders, medium horsepower, and average weight.
+ANSWER: Car #175 has good fuel efficiency.
+---
+INPUT: Car #176 has 4 cylinders, moderate acceleration, light weight, medium displacement, and medium horsepower.
+ANSWER: Car #176 has bad fuel efficiency.
+---
+INPUT: Car #177 has medium displacement, 6 cylinders, medium horsepower, average weight, and fast acceleration.
+ANSWER: Car #177 has bad fuel efficiency.
+---
+INPUT: Car #178 has high horsepower, slow acceleration, high displacement, average weight, and 8 cylinders.
+ANSWER: Car #178 has bad fuel efficiency.
+---
+INPUT: Car #179 has medium displacement, average weight, 4 cylinders, high horsepower, and moderate acceleration.
+ANSWER: Car #179 has bad fuel efficiency.
+---
+INPUT: Car #180 has fast acceleration, 4 cylinders, medium horsepower, medium displacement, and average weight.
+ANSWER: Car #180 has bad fuel efficiency.
+---
+INPUT: Car #181 has high horsepower, high displacement, 8 cylinders, slow acceleration, and heavy weight.
+ANSWER: Car #181 has bad fuel efficiency.
+---
+INPUT: Car #182 has fast acceleration, high displacement, average weight, medium horsepower, and 6 cylinders.
+ANSWER: Car #182 has good fuel efficiency.
+---
+INPUT: Car #183 has high displacement, 8 cylinders, slow acceleration, heavy weight, and high horsepower.
+ANSWER: Car #183 has bad fuel efficiency.
+---
+INPUT: Car #184 has low horsepower, low displacement, moderate acceleration, light weight, and 4 cylinders.
+ANSWER: Car #184 has good fuel efficiency.
+---
+INPUT: Car #185 has light weight, low horsepower, medium displacement, 4 cylinders, and slow acceleration.
+ANSWER: Car #185 has good fuel efficiency.
+---
+INPUT: Car #186 has high horsepower, heavy weight, slow acceleration, 8 cylinders, and high displacement.
+ANSWER: Car #186 has bad fuel efficiency.
+---
+INPUT: Car #187 has high horsepower, heavy weight, high displacement, 8 cylinders, and slow acceleration.
+ANSWER: Car #187 has bad fuel efficiency.
+---
+INPUT: Car #188 has low displacement, light weight, 4 cylinders, slow acceleration, and low horsepower.
+ANSWER: Car #188 has good fuel efficiency.
+---
+INPUT: Car #189 has slow acceleration, high horsepower, 8 cylinders, high displacement, and heavy weight.
+ANSWER: Car #189 has bad fuel efficiency.
+---
+INPUT: Car #190 has 8 cylinders, slow acceleration, high horsepower, high displacement, and heavy weight.
+ANSWER: Car #190 has bad fuel efficiency.
+---
+INPUT: Car #191 has fast acceleration, low horsepower, average weight, medium displacement, and 4 cylinders.
+ANSWER: Car #191 has bad fuel efficiency.
+---
+INPUT: Car #192 has moderate acceleration, medium horsepower, medium displacement, 6 cylinders, and average weight.
+ANSWER: Car #192 has bad fuel efficiency.
+---
+INPUT: Car #193 has medium displacement, 4 cylinders, low horsepower, average weight, and moderate acceleration.
+ANSWER: Car #193 has good fuel efficiency.
+---
+INPUT: Car #194 has slow acceleration, average weight, medium displacement, low horsepower, and 4 cylinders.
+ANSWER: Car #194 has good fuel efficiency.
+---
+INPUT: Car #195 has medium displacement, moderate acceleration, 6 cylinders, high horsepower, and average weight.
+ANSWER: Car #195 has good fuel efficiency.
+---
+INPUT: Car #196 has slow acceleration, high displacement, 8 cylinders, heavy weight, and high horsepower.
+ANSWER: Car #196 has bad fuel efficiency.
+---
+INPUT: Car #197 has low horsepower, medium displacement, 5 cylinders, heavy weight, and fast acceleration.
+ANSWER: Car #197 has good fuel efficiency.
+---
+INPUT: Car #198 has medium horsepower, 4 cylinders, slow acceleration, medium displacement, and average weight.
+ANSWER: Car #198 has good fuel efficiency.
+---
+INPUT: Car #199 has high displacement, moderate acceleration, heavy weight, high horsepower, and 8 cylinders.
+ANSWER: Car #199 has bad fuel efficiency.
+---
+INPUT: Car #200 has fast acceleration, medium displacement, medium horsepower, 4 cylinders, and average weight.
+ANSWER: Car #200 has good fuel efficiency.
+---
+INPUT: Car #201 has 4 cylinders, low displacement, low horsepower, light weight, and fast acceleration.
+ANSWER: Car #201 has good fuel efficiency.
+---
+INPUT: Car #202 has medium displacement, average weight, 4 cylinders, low horsepower, and fast acceleration.
+ANSWER: Car #202 has good fuel efficiency.
+---
+INPUT: Car #203 has medium displacement, fast acceleration, average weight, medium horsepower, and 4 cylinders.
+ANSWER: Car #203 has good fuel efficiency.
+---
+INPUT: Car #204 has medium horsepower, average weight, 6 cylinders, moderate acceleration, and medium displacement.
+ANSWER: Car #204 has bad fuel efficiency.
+---
+INPUT: Car #205 has light weight, 4 cylinders, fast acceleration, low displacement, and low horsepower.
+ANSWER: Car #205 has good fuel efficiency.
+---
+INPUT: Car #206 has 4 cylinders, moderate acceleration, low horsepower, light weight, and low displacement.
+ANSWER: Car #206 has good fuel efficiency.
+---
+INPUT: Car #207 has 8 cylinders, high displacement, high horsepower, heavy weight, and slow acceleration.
+ANSWER: Car #207 has bad fuel efficiency.
+---
+INPUT: Car #208 has light weight, moderate acceleration, 4 cylinders, medium horsepower, and low displacement.
+ANSWER: Car #208 has good fuel efficiency.
+---
+INPUT: Car #209 has 6 cylinders, medium displacement, medium horsepower, moderate acceleration, and average weight.
+ANSWER: Car #209 has bad fuel efficiency.
+---
+INPUT: Car #210 has fast acceleration, average weight, 6 cylinders, medium horsepower, and medium displacement.
+ANSWER: Car #210 has bad fuel efficiency.
+---
+INPUT: Car #211 has medium displacement, 6 cylinders, heavy weight, high horsepower, and fast acceleration.
+ANSWER: Car #211 has bad fuel efficiency.
+---
+INPUT: Car #212 has high horsepower, 8 cylinders, slow acceleration, heavy weight, and high displacement.
+ANSWER: Car #212 has bad fuel efficiency.
+---
+INPUT: Car #213 has moderate acceleration, high horsepower, high displacement, heavy weight, and 8 cylinders.
+ANSWER: Car #213 has bad fuel efficiency.
+---
+INPUT: Car #214 has medium displacement, high horsepower, 6 cylinders, heavy weight, and moderate acceleration.
+ANSWER: Car #214 has bad fuel efficiency.
+---
+INPUT: Car #215 has low horsepower, light weight, 4 cylinders, low displacement, and fast acceleration.
+ANSWER: Car #215 has good fuel efficiency.
+---
+INPUT: Car #216 has 6 cylinders, average weight, high horsepower, moderate acceleration, and medium displacement.
+ANSWER: Car #216 has bad fuel efficiency.
+---
+INPUT: Car #217 has medium horsepower, fast acceleration, low displacement, light weight, and 4 cylinders.
+ANSWER: Car #217 has good fuel efficiency.
+---
+INPUT: Car #218 has fast acceleration, average weight, 4 cylinders, medium horsepower, and medium displacement.
+ANSWER: Car #218 has good fuel efficiency.
+---
+INPUT: Car #219 has medium displacement, slow acceleration, high horsepower, 4 cylinders, and average weight.
+ANSWER: Car #219 has good fuel efficiency.
+---
+INPUT: Car #220 has low displacement, low horsepower, light weight, 4 cylinders, and moderate acceleration.
+ANSWER: Car #220 has good fuel efficiency.
+---
+INPUT: Car #221 has low displacement, light weight, low horsepower, fast acceleration, and 4 cylinders.
+ANSWER: Car #221 has good fuel efficiency.
+---
+INPUT: Car #222 has low displacement, medium horsepower, 4 cylinders, light weight, and moderate acceleration.
+ANSWER: Car #222 has good fuel efficiency.
+---
+INPUT: Car #223 has low horsepower, slow acceleration, light weight, 4 cylinders, and low displacement.
+ANSWER: Car #223 has good fuel efficiency.
+---
+INPUT: Car #224 has low horsepower, low displacement, 4 cylinders, fast acceleration, and light weight.
+ANSWER: Car #224 has good fuel efficiency.
+---
+INPUT: Car #225 has high horsepower, slow acceleration, 8 cylinders, heavy weight, and high displacement.
+ANSWER: Car #225 has bad fuel efficiency.
+---
+INPUT: Car #226 has fast acceleration, light weight, low horsepower, 4 cylinders, and low displacement.
+ANSWER: Car #226 has good fuel efficiency.
+---
+INPUT: Car #227 has high displacement, heavy weight, 8 cylinders, high horsepower, and slow acceleration.
+ANSWER: Car #227 has bad fuel efficiency.
+---
+INPUT: Car #228 has medium displacement, heavy weight, medium horsepower, fast acceleration, and 6 cylinders.
+ANSWER: Car #228 has bad fuel efficiency.
+---
+INPUT: Car #229 has light weight, low displacement, fast acceleration, low horsepower, and 4 cylinders.
+ANSWER: Car #229 has good fuel efficiency.
+---
+INPUT: Car #230 has 4 cylinders, medium displacement, average weight, fast acceleration, and medium horsepower.
+ANSWER: Car #230 has good fuel efficiency.
+---
+INPUT: Car #231 has medium horsepower, medium displacement, 6 cylinders, fast acceleration, and heavy weight.
+ANSWER: Car #231 has bad fuel efficiency.
+---
+INPUT: Car #232 has 4 cylinders, light weight, fast acceleration, low displacement, and low horsepower.
+ANSWER: Car #232 has good fuel efficiency.
+---
+INPUT: Car #233 has low horsepower, medium displacement, average weight, 4 cylinders, and fast acceleration.
+ANSWER: Car #233 has good fuel efficiency.
+---
+INPUT: Car #234 has light weight, slow acceleration, low horsepower, 4 cylinders, and medium displacement.
+ANSWER: Car #234 has good fuel efficiency.
+---
+INPUT: Car #235 has heavy weight, slow acceleration, high displacement, 8 cylinders, and high horsepower.
+ANSWER: Car #235 has bad fuel efficiency.
+---
+INPUT: Car #236 has fast acceleration, 6 cylinders, medium displacement, average weight, and medium horsepower.
+ANSWER: Car #236 has bad fuel efficiency.
+---
+INPUT: Car #237 has 6 cylinders, high displacement, low horsepower, heavy weight, and fast acceleration.
+ANSWER: Car #237 has bad fuel efficiency.
+---
+INPUT: Car #238 has low displacement, low horsepower, 4 cylinders, light weight, and fast acceleration.
+ANSWER: Car #238 has good fuel efficiency.
+---
+INPUT: Car #239 has fast acceleration, high horsepower, medium displacement, heavy weight, and 6 cylinders.
+ANSWER: Car #239 has bad fuel efficiency.
+---
+INPUT: Car #240 has medium horsepower, slow acceleration, medium displacement, average weight, and 4 cylinders.
+ANSWER: Car #240 has good fuel efficiency.
+---
+INPUT: Car #241 has average weight, fast acceleration, high displacement, 6 cylinders, and low horsepower.
+ANSWER: Car #241 has bad fuel efficiency.
+---
+INPUT: Car #242 has 8 cylinders, high displacement, high horsepower, slow acceleration, and heavy weight.
+ANSWER: Car #242 has bad fuel efficiency.
+---
+INPUT: Car #243 has 6 cylinders, medium horsepower, moderate acceleration, heavy weight, and medium displacement.
+ANSWER: Car #243 has bad fuel efficiency.
+---
+INPUT: Car #244 has 4 cylinders, low displacement, moderate acceleration, low horsepower, and light weight.
+ANSWER: Car #244 has good fuel efficiency.
+---
+INPUT: Car #245 has average weight, medium displacement, 6 cylinders, fast acceleration, and medium horsepower.
+ANSWER: Car #245 has bad fuel efficiency.
+---
+INPUT: Car #246 has heavy weight, high displacement, 8 cylinders, slow acceleration, and high horsepower.
+ANSWER: Car #246 has bad fuel efficiency.
+---
+INPUT: Car #247 has moderate acceleration, 4 cylinders, low horsepower, light weight, and low displacement.
+ANSWER: Car #247 has good fuel efficiency.
+---
+INPUT: Car #248 has high horsepower, high displacement, 8 cylinders, slow acceleration, and heavy weight.
+ANSWER: Car #248 has bad fuel efficiency.
+---
+INPUT: Car #249 has moderate acceleration, light weight, low horsepower, 4 cylinders, and low displacement.
+ANSWER: Car #249 has good fuel efficiency.
+---
+INPUT: Car #250 has 4 cylinders, moderate acceleration, medium displacement, medium horsepower, and average weight.
+ANSWER: Car #250 has good fuel efficiency.
+---
+INPUT: Car #251 has moderate acceleration, medium horsepower, 4 cylinders, medium displacement, and light weight.
+ANSWER: Car #251 has good fuel efficiency.
+---
+INPUT: Car #252 has 6 cylinders, heavy weight, medium horsepower, medium displacement, and fast acceleration.
+ANSWER: Car #252 has bad fuel efficiency.
+---
+INPUT: Car #253 has low displacement, low horsepower, fast acceleration, 4 cylinders, and light weight.
+ANSWER: Car #253 has good fuel efficiency.
+---
+INPUT: Car #254 has fast acceleration, 6 cylinders, average weight, medium displacement, and low horsepower.
+ANSWER: Car #254 has good fuel efficiency.
+---
+INPUT: Car #255 has 6 cylinders, heavy weight, slow acceleration, high horsepower, and medium displacement.
+ANSWER: Car #255 has bad fuel efficiency.
+---
+INPUT: Car #256 has 3 cylinders, average weight, slow acceleration, high horsepower, and low displacement.
+ANSWER: Car #256 has bad fuel efficiency.
+---
+INPUT: Car #257 has 8 cylinders, heavy weight, moderate acceleration, high displacement, and high horsepower.
+ANSWER: Car #257 has bad fuel efficiency.
+---
+INPUT: Car #258 has light weight, low displacement, medium horsepower, moderate acceleration, and 4 cylinders.
+ANSWER: Car #258 has good fuel efficiency.
+---
+INPUT: Car #259 has low horsepower, light weight, 4 cylinders, low displacement, and fast acceleration.
+ANSWER: Car #259 has good fuel efficiency.
+---
+INPUT: Car #260 has slow acceleration, high horsepower, high displacement, heavy weight, and 8 cylinders.
+ANSWER: Car #260 has bad fuel efficiency.
+---
+INPUT: Car #261 has fast acceleration, low displacement, low horsepower, light weight, and 4 cylinders.
+ANSWER: Car #261 has good fuel efficiency.
+---
+INPUT: Car #262 has medium horsepower, average weight, moderate acceleration, 4 cylinders, and medium displacement.
+ANSWER: Car #262 has good fuel efficiency.
+---
+INPUT: Car #263 has light weight, moderate acceleration, 4 cylinders, low horsepower, and low displacement.
+ANSWER: Car #263 has good fuel efficiency.
+---
+INPUT: Car #264 has low horsepower, fast acceleration, low displacement, light weight, and 4 cylinders.
+ANSWER: Car #264 has good fuel efficiency.
+---
+INPUT: Car #265 has low horsepower, light weight, low displacement, slow acceleration, and 4 cylinders.
+ANSWER: Car #265 has good fuel efficiency.
+---
+INPUT: Car #266 has high displacement, high horsepower, slow acceleration, heavy weight, and 8 cylinders.
+ANSWER: Car #266 has bad fuel efficiency.
+---
+INPUT: Car #267 has medium displacement, fast acceleration, 6 cylinders, medium horsepower, and heavy weight.
+ANSWER: Car #267 has bad fuel efficiency.
+---
+INPUT: Car #268 has moderate acceleration, 4 cylinders, low displacement, medium horsepower, and light weight.
+ANSWER: Car #268 has good fuel efficiency.
+---
+INPUT: Car #269 has moderate acceleration, low displacement, 4 cylinders, low horsepower, and light weight.
+ANSWER: Car #269 has good fuel efficiency.
+---
+INPUT: Car #270 has slow acceleration, low horsepower, low displacement, light weight, and 4 cylinders.
+ANSWER: Car #270 has good fuel efficiency.
+---
+INPUT: Car #271 has heavy weight, high displacement, high horsepower, slow acceleration, and 8 cylinders.
+ANSWER: Car #271 has bad fuel efficiency.
+---
+INPUT: Car #272 has fast acceleration, average weight, low horsepower, medium displacement, and 4 cylinders.
+ANSWER: Car #272 has good fuel efficiency.
+---
+INPUT: Car #273 has 4 cylinders, moderate acceleration, average weight, medium horsepower, and medium displacement.
+ANSWER: Car #273 has bad fuel efficiency.
+---
+INPUT: Car #274 has 4 cylinders, fast acceleration, medium horsepower, low displacement, and light weight.
+ANSWER: Car #274 has good fuel efficiency.
+---
+INPUT: Car #275 has moderate acceleration, low horsepower, 4 cylinders, light weight, and low displacement.
+ANSWER: Car #275 has good fuel efficiency.
+---
+INPUT: Car #276 has high displacement, 8 cylinders, moderate acceleration, high horsepower, and heavy weight.
+ANSWER: Car #276 has bad fuel efficiency.
+---
+INPUT: Car #277 has slow acceleration, 8 cylinders, heavy weight, high displacement, and high horsepower.
+ANSWER: Car #277 has bad fuel efficiency.
+---
+INPUT: Car #278 has 4 cylinders, medium displacement, slow acceleration, average weight, and medium horsepower.
+ANSWER: Car #278 has good fuel efficiency.
+---
+INPUT: Car #279 has 4 cylinders, light weight, low horsepower, low displacement, and moderate acceleration.
+ANSWER: Car #279 has good fuel efficiency.
+---
+INPUT: Car #280 has average weight, high horsepower, 6 cylinders, medium displacement, and slow acceleration.
+ANSWER: Car #280 has bad fuel efficiency.
+---
+INPUT: Car #281 has low displacement, fast acceleration, light weight, low horsepower, and 4 cylinders.
+ANSWER: Car #281 has good fuel efficiency.
+---
+INPUT: Car #282 has 8 cylinders, high displacement, slow acceleration, high horsepower, and heavy weight.
+ANSWER: Car #282 has bad fuel efficiency.
+---
+INPUT: Car #283 has high horsepower, slow acceleration, 8 cylinders, high displacement, and heavy weight.
+ANSWER: Car #283 has bad fuel efficiency.
+---
+INPUT: Car #284 has moderate acceleration, 6 cylinders, medium horsepower, high displacement, and heavy weight.
+ANSWER: Car #284 has bad fuel efficiency.
+---
+INPUT: Car #285 has 8 cylinders, high displacement, slow acceleration, heavy weight, and high horsepower.
+ANSWER: Car #285 has bad fuel efficiency.
+---
+INPUT: Car #286 has medium horsepower, average weight, moderate acceleration, medium displacement, and 4 cylinders.
+ANSWER: Car #286 has good fuel efficiency.
+---
+INPUT: Car #287 has fast acceleration, 4 cylinders, medium horsepower, low displacement, and average weight.
+ANSWER: Car #287 has good fuel efficiency.
+---
+INPUT: Car #288 has medium displacement, average weight, 4 cylinders, moderate acceleration, and medium horsepower.
+ANSWER: Car #288 has good fuel efficiency.
+---
+INPUT: Car #289 has medium horsepower, average weight, 6 cylinders, moderate acceleration, and medium displacement.
+ANSWER: Car #289 has bad fuel efficiency.
+---
+INPUT: Car #290 has light weight, fast acceleration, low displacement, low horsepower, and 4 cylinders.
+ANSWER: Car #290 has good fuel efficiency.
+---
+INPUT: Car #291 has medium displacement, light weight, medium horsepower, 4 cylinders, and slow acceleration.
+ANSWER: Car #291 has good fuel efficiency.
+---
+INPUT: Car #292 has high horsepower, 8 cylinders, heavy weight, high displacement, and slow acceleration.
+ANSWER: Car #292 has bad fuel efficiency.
+---
+INPUT: Car #293 has average weight, 6 cylinders, medium horsepower, moderate acceleration, and medium displacement.
+ANSWER: Car #293 has bad fuel efficiency.
+---
+INPUT: Car #294 has moderate acceleration, average weight, 6 cylinders, high displacement, and medium horsepower.
+ANSWER: Car #294 has bad fuel efficiency.
+---
+INPUT: Car #295 has moderate acceleration, 4 cylinders, low horsepower, light weight, and low displacement.
+ANSWER: Car #295 has good fuel efficiency.
+---
+INPUT: Car #296 has high displacement, 8 cylinders, high horsepower, slow acceleration, and heavy weight.
+ANSWER: Car #296 has bad fuel efficiency.
+---
+INPUT: Car #297 has heavy weight, high displacement, fast acceleration, 6 cylinders, and medium horsepower.
+ANSWER: Car #297 has bad fuel efficiency.
+---
+INPUT: Car #298 has average weight, medium horsepower, moderate acceleration, 5 cylinders, and medium displacement.
+ANSWER: Car #298 has bad fuel efficiency.
+---
+INPUT: Car #299 has moderate acceleration, light weight, 4 cylinders, low displacement, and low horsepower.
+ANSWER: Car #299 has good fuel efficiency.
+---
+INPUT: Car #300 has high horsepower, high displacement, heavy weight, slow acceleration, and 8 cylinders.
+ANSWER: Car #300 has bad fuel efficiency.
+---
+INPUT: Car #301 has medium horsepower, moderate acceleration, average weight, medium displacement, and 4 cylinders.
+ANSWER: Car #301 has good fuel efficiency.
+---
+INPUT: Car #302 has medium displacement, fast acceleration, medium horsepower, 6 cylinders, and heavy weight.
+ANSWER: Car #302 has bad fuel efficiency.
+---
+INPUT: Car #303 has 4 cylinders, low horsepower, moderate acceleration, low displacement, and light weight.
+ANSWER: Car #303 has good fuel efficiency.
+---
+INPUT: Car #304 has low displacement, fast acceleration, light weight, low horsepower, and 4 cylinders.
+ANSWER: Car #304 has good fuel efficiency.
+---
+INPUT: Car #305 has medium displacement, 6 cylinders, medium horsepower, moderate acceleration, and heavy weight.
+ANSWER: Car #305 has bad fuel efficiency.
+---
+INPUT: Car #306 has heavy weight, slow acceleration, high horsepower, 8 cylinders, and high displacement.
+ANSWER: Car #306 has bad fuel efficiency.
+---
+INPUT: Car #307 has high displacement, slow acceleration, heavy weight, 8 cylinders, and high horsepower.
+ANSWER: Car #307 has bad fuel efficiency.
+---
+INPUT: Car #308 has moderate acceleration, low displacement, light weight, 4 cylinders, and low horsepower.
+ANSWER: Car #308 has good fuel efficiency.
+---
+INPUT: Car #309 has medium horsepower, average weight, moderate acceleration, high displacement, and 6 cylinders.
+ANSWER: Car #309 has bad fuel efficiency.
+---
+INPUT: Car #310 has moderate acceleration, medium displacement, high horsepower, 4 cylinders, and average weight.
+ANSWER: Car #310 has bad fuel efficiency.
+---
+INPUT: Car #311 has low displacement, 4 cylinders, light weight, low horsepower, and fast acceleration.
+ANSWER: Car #311 has good fuel efficiency.
+---
+INPUT: Car #312 has 6 cylinders, medium horsepower, fast acceleration, high displacement, and average weight.
+ANSWER: Car #312 has bad fuel efficiency.
+---
+INPUT: Car #313 has moderate acceleration, light weight, low displacement, 4 cylinders, and low horsepower.
+ANSWER: Car #313 has good fuel efficiency.
+---
+INPUT: Car #314 has medium displacement, 4 cylinders, slow acceleration, average weight, and high horsepower.
+ANSWER: Car #314 has good fuel efficiency.
+---
+INPUT: Car #315 has 6 cylinders, medium displacement, fast acceleration, heavy weight, and medium horsepower.
+ANSWER: Car #315 has bad fuel efficiency.
+---
+INPUT: Car #316 has medium displacement, fast acceleration, 6 cylinders, average weight, and medium horsepower.
+ANSWER: Car #316 has bad fuel efficiency.
+---
+INPUT: Car #317 has high displacement, 8 cylinders, heavy weight, slow acceleration, and high horsepower.
+ANSWER: Car #317 has bad fuel efficiency.
+---
+INPUT: Car #318 has high displacement, high horsepower, heavy weight, 8 cylinders, and slow acceleration.
+ANSWER: Car #318 has bad fuel efficiency.
+---
+INPUT: Car #319 has slow acceleration, medium displacement, 6 cylinders, high horsepower, and average weight.
+ANSWER: Car #319 has good fuel efficiency.
+---
+INPUT: Car #320 has fast acceleration, medium displacement, low horsepower, 4 cylinders, and average weight.
+ANSWER: Car #320 has good fuel efficiency.
+---
+INPUT: Car #321 has heavy weight, high displacement, moderate acceleration, 8 cylinders, and high horsepower.
+ANSWER: Car #321 has bad fuel efficiency.
+---
+INPUT: Car #322 has 4 cylinders, average weight, moderate acceleration, medium displacement, and medium horsepower.
+ANSWER: Car #322 has good fuel efficiency.
+---
+INPUT: Car #323 has high horsepower, heavy weight, 6 cylinders, medium displacement, and moderate acceleration.
+ANSWER: Car #323 has bad fuel efficiency.
+---
+INPUT: Car #324 has medium displacement, average weight, 4 cylinders, low horsepower, and fast acceleration.
+ANSWER: Car #324 has good fuel efficiency.
+---
+INPUT: Car #325 has heavy weight, high horsepower, 8 cylinders, high displacement, and slow acceleration.
+ANSWER: Car #325 has bad fuel efficiency.
+---
+INPUT: Car #326 has 4 cylinders, low displacement, low horsepower, light weight, and fast acceleration.
+ANSWER: Car #326 has good fuel efficiency.
+---
+INPUT: Car #327 has average weight, 4 cylinders, medium displacement, moderate acceleration, and medium horsepower.
+ANSWER: Car #327 has good fuel efficiency.
+---
+INPUT: Car #328 has medium displacement, medium horsepower, average weight, 6 cylinders, and fast acceleration.
+ANSWER: Car #328 has bad fuel efficiency.
+---
+INPUT: Car #329 has 6 cylinders, high displacement, moderate acceleration, heavy weight, and medium horsepower.
+ANSWER: Car #329 has bad fuel efficiency.
+---
+INPUT: Car #330 has fast acceleration, low displacement, low horsepower, light weight, and 4 cylinders.
+ANSWER: Car #330 has good fuel efficiency.
+---
+INPUT: Car #331 has low displacement, light weight, 4 cylinders, slow acceleration, and medium horsepower.
+ANSWER: Car #331 has good fuel efficiency.
+---
+INPUT: Car #332 has slow acceleration, heavy weight, high horsepower, high displacement, and 8 cylinders.
+ANSWER: Car #332 has bad fuel efficiency.
+---
+INPUT: Car #333 has light weight, moderate acceleration, low horsepower, 4 cylinders, and low displacement.
+ANSWER: Car #333 has good fuel efficiency.
+---
+INPUT: Car #334 has 8 cylinders, high horsepower, slow acceleration, high displacement, and heavy weight.
+ANSWER: Car #334 has bad fuel efficiency.
+---
+INPUT: Car #335 has 6 cylinders, heavy weight, high displacement, high horsepower, and moderate acceleration.
+ANSWER: Car #335 has bad fuel efficiency.
+---
+INPUT: Car #336 has 4 cylinders, low displacement, slow acceleration, low horsepower, and light weight.
+ANSWER: Car #336 has good fuel efficiency.
+---
+INPUT: Car #337 has medium displacement, high horsepower, 6 cylinders, average weight, and moderate acceleration.
+ANSWER: Car #337 has bad fuel efficiency.
+---
+INPUT: Car #338 has light weight, 4 cylinders, low horsepower, low displacement, and fast acceleration.
+ANSWER: Car #338 has good fuel efficiency.
+---
+INPUT: Car #339 has low displacement, light weight, slow acceleration, 4 cylinders, and low horsepower.
+ANSWER: Car #339 has good fuel efficiency.
+---
+INPUT: Car #340 has high horsepower, 8 cylinders, high displacement, slow acceleration, and heavy weight.
+ANSWER: Car #340 has bad fuel efficiency.
+---
+INPUT: Car #341 has high displacement, high horsepower, 8 cylinders, slow acceleration, and heavy weight.
+ANSWER: Car #341 has bad fuel efficiency.
+---
+INPUT: Car #342 has 6 cylinders, fast acceleration, average weight, medium horsepower, and medium displacement.
+ANSWER: Car #342 has bad fuel efficiency.
+---
+INPUT: Car #343 has light weight, low displacement, fast acceleration, low horsepower, and 4 cylinders.
+ANSWER: Car #343 has good fuel efficiency.
+---
+INPUT: Car #344 has heavy weight, moderate acceleration, 6 cylinders, high horsepower, and high displacement.
+ANSWER: Car #344 has bad fuel efficiency.
+---
+INPUT: Car #345 has average weight, moderate acceleration, medium horsepower, medium displacement, and 6 cylinders.
+ANSWER: Car #345 has bad fuel efficiency.
+---
+INPUT: Car #346 has low horsepower, average weight, medium displacement, fast acceleration, and 6 cylinders.
+ANSWER: Car #346 has good fuel efficiency.
+---
+INPUT: Car #347 has moderate acceleration, 4 cylinders, low horsepower, light weight, and low displacement.
+ANSWER: Car #347 has good fuel efficiency.
+---
+INPUT: Car #348 has 4 cylinders, average weight, moderate acceleration, low displacement, and medium horsepower.
+ANSWER: Car #348 has good fuel efficiency.
+---
+INPUT: Car #349 has average weight, low horsepower, fast acceleration, medium displacement, and 4 cylinders.
+ANSWER: Car #349 has good fuel efficiency.
+---
+INPUT: Car #350 has average weight, moderate acceleration, 4 cylinders, medium horsepower, and medium displacement.
+ANSWER: Car #350 has good fuel efficiency.
+---
+INPUT: Car #351 has low horsepower, low displacement, light weight, 4 cylinders, and fast acceleration.
+ANSWER: Car #351 has good fuel efficiency.
+---
+INPUT: Car #352 has 3 cylinders, low displacement, light weight, medium horsepower, and slow acceleration.
+ANSWER: Car #352 has bad fuel efficiency.
+---
+INPUT: Car #353 has average weight, medium displacement, 6 cylinders, medium horsepower, and moderate acceleration.
+ANSWER: Car #353 has bad fuel efficiency.
+---
+INPUT: Car #354 has high horsepower, 8 cylinders, slow acceleration, heavy weight, and high displacement.
+ANSWER: Car #354 has bad fuel efficiency.
+---
+INPUT: Car #355 has medium horsepower, moderate acceleration, average weight, low displacement, and 4 cylinders.
+ANSWER: Car #355 has good fuel efficiency.
+---
+INPUT: Car #356 has light weight, low displacement, fast acceleration, low horsepower, and 4 cylinders.
+ANSWER: Car #356 has good fuel efficiency.
+---
+INPUT: Car #357 has low displacement, fast acceleration, light weight, 4 cylinders, and low horsepower.
+ANSWER: Car #357 has good fuel efficiency.
+---
+INPUT: Car #358 has 4 cylinders, low displacement, low horsepower, light weight, and fast acceleration.
+ANSWER: Car #358 has good fuel efficiency.
+---
+INPUT: Car #359 has high displacement, 8 cylinders, heavy weight, slow acceleration, and high horsepower.
+ANSWER: Car #359 has bad fuel efficiency.
+---
+INPUT: Car #360 has light weight, 4 cylinders, fast acceleration, low displacement, and low horsepower.
+ANSWER: Car #360 has good fuel efficiency.
+---
+INPUT: Car #361 has slow acceleration, high horsepower, 4 cylinders, medium displacement, and light weight.
+ANSWER: Car #361 has good fuel efficiency.
+---
+INPUT: Car #362 has medium displacement, average weight, moderate acceleration, medium horsepower, and 4 cylinders.
+ANSWER: Car #362 has good fuel efficiency.
+---
+INPUT: Car #363 has 4 cylinders, average weight, medium horsepower, fast acceleration, and medium displacement.
+ANSWER: Car #363 has good fuel efficiency.
+---
+INPUT: Car #364 has medium displacement, moderate acceleration, medium horsepower, light weight, and 4 cylinders.
+ANSWER: Car #364 has good fuel efficiency.
+---
+INPUT: Car #365 has 4 cylinders, medium displacement, medium horsepower, moderate acceleration, and average weight.
+ANSWER: Car #365 has good fuel efficiency.
+---
+INPUT: Car #366 has high displacement, 8 cylinders, slow acceleration, high horsepower, and heavy weight.
+ANSWER: Car #366 has bad fuel efficiency.
+---
+INPUT: Car #367 has fast acceleration, light weight, low horsepower, low displacement, and 4 cylinders.
+ANSWER: Car #367 has good fuel efficiency.
+---
+INPUT: Car #368 has 8 cylinders, high horsepower, heavy weight, high displacement, and slow acceleration.
+ANSWER: Car #368 has bad fuel efficiency.
+---
+INPUT: Car #369 has low horsepower, low displacement, light weight, 4 cylinders, and moderate acceleration.
+ANSWER: Car #369 has good fuel efficiency.
+---
+INPUT: Car #370 has medium displacement, 4 cylinders, medium horsepower, moderate acceleration, and average weight.
+ANSWER: Car #370 has good fuel efficiency.
+---
+INPUT: Car #371 has low displacement, average weight, fast acceleration, 4 cylinders, and medium horsepower.
+ANSWER: Car #371 has good fuel efficiency.
+---
+INPUT: Car #372 has 4 cylinders, low horsepower, light weight, low displacement, and slow acceleration.
+ANSWER: Car #372 has good fuel efficiency.
+---
+INPUT: Car #373 has average weight, low horsepower, 4 cylinders, moderate acceleration, and medium displacement.
+ANSWER: Car #373 has good fuel efficiency.
+---
+INPUT: Car #374 has heavy weight, medium horsepower, fast acceleration, 8 cylinders, and high displacement.
+ANSWER: Car #374 has good fuel efficiency.
+---
+INPUT: Car #375 has slow acceleration, 8 cylinders, heavy weight, high displacement, and high horsepower.
+ANSWER: Car #375 has bad fuel efficiency.
+---
+INPUT: Car #376 has low displacement, 4 cylinders, light weight, low horsepower, and slow acceleration.
+ANSWER: Car #376 has good fuel efficiency.
+---
+INPUT: Car #377 has heavy weight, high horsepower, 8 cylinders, slow acceleration, and high displacement.
+ANSWER: Car #377 has bad fuel efficiency.
+---
+INPUT: Car #378 has high displacement, heavy weight, 8 cylinders, fast acceleration, and high horsepower.
+ANSWER: Car #378 has bad fuel efficiency.
+---
+INPUT: Car #379 has light weight, 4 cylinders, low displacement, fast acceleration, and low horsepower.
+ANSWER: Car #379 has good fuel efficiency.
+---
+INPUT: Car #380 has high horsepower, medium displacement, average weight, slow acceleration, and 6 cylinders.
+ANSWER: Car #380 has bad fuel efficiency.
+---
+INPUT: Car #381 has average weight, low horsepower, 4 cylinders, fast acceleration, and medium displacement.
+ANSWER: Car #381 has good fuel efficiency.
+---
+INPUT: Car #382 has low horsepower, 4 cylinders, fast acceleration, light weight, and low displacement.
+ANSWER: Car #382 has good fuel efficiency.
+---
+INPUT: Car #383 has low displacement, fast acceleration, light weight, low horsepower, and 4 cylinders.
+ANSWER: Car #383 has good fuel efficiency.
+---
+INPUT: Car #384 has high displacement, slow acceleration, high horsepower, 8 cylinders, and average weight.
+ANSWER: Car #384 has bad fuel efficiency.
+---
+INPUT: Car #385 has high displacement, high horsepower, 8 cylinders, heavy weight, and slow acceleration.
+ANSWER: Car #385 has bad fuel efficiency.
+---
+INPUT: Car #386 has slow acceleration, high horsepower, 8 cylinders, high displacement, and heavy weight.
+ANSWER: Car #386 has bad fuel efficiency.
+---
+INPUT: Car #387 has fast acceleration, medium displacement, medium horsepower, average weight, and 6 cylinders.
+ANSWER: Car #387 has bad fuel efficiency.
+---
+INPUT: Car #388 has heavy weight, fast acceleration, 6 cylinders, high displacement, and high horsepower.
+ANSWER: Car #388 has bad fuel efficiency.
+---
+INPUT: Car #389 has high horsepower, slow acceleration, heavy weight, high displacement, and 8 cylinders.
+ANSWER: Car #389 has bad fuel efficiency.
+---
+INPUT: Car #390 has heavy weight, fast acceleration, medium horsepower, 6 cylinders, and high displacement.
+ANSWER: Car #390 has bad fuel efficiency.
+---
+INPUT: Car #391 has medium horsepower, medium displacement, moderate acceleration, 4 cylinders, and average weight.
+ANSWER: Car #391 has bad fuel efficiency.
+---
+INPUT: Car #392 has 4 cylinders, low displacement, low horsepower, light weight, and moderate acceleration.
+ANSWER: Car #392 has good fuel efficiency.
+---
