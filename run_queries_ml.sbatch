@@ -16,9 +16,7 @@
 # ── Environment ──────────────────────────────────────────────────────────────
 module purge
 module load anaconda3/2025.06
-
-# Activate your conda env (replace with your actual env name)
-conda activate /scratch/ic2664/envs/queries_ml
+conda activate query-ml
 
 # ── Working directory ─────────────────────────────────────────────────────────
 cd $SLURM_SUBMIT_DIR

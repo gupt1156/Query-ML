@@ -27,7 +27,7 @@ torch.manual_seed(SEED)
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 print(f"Using device: {DEVICE}")
 
-df = pd.read_csv("/Users/bellachang/Desktop/Query-ML-proj/data/mpg_simple_textual.txt")
+df = pd.read_csv("/scratch/ic2664/Query-ML-proj/data/mpg_simple_textual.txt")
 df['text'] = df[df.columns[1:5]].astype(str).agg(" ".join, axis=1)
 df = df[['text', 'target', 'id']]
 
@@ -41,7 +41,7 @@ neg = df[df['target'] == 0].sample(n=N_PER_CLASS, random_state=SEED)
 df_balanced = pd.concat([pos, neg]).sample(frac=1, random_state=SEED).reset_index(drop=True)
 
 
-MODEL_PATH = "/scratch/kv2361/LLMs/Llama-4-Scout"
+MODEL_PATH = "/scratch/ic2664/LLMs/Llama-4-Scout-17B-16E-Instruct"
 
 print("Loading tokenizer...")
 tokenizer = AutoTokenizer.from_pretrained(MODEL_PATH)
@@ -80,46 +80,49 @@ def generate_text(prompt, max_new_tokens=512, temperature=0.3):
 
 def build_query_generation_prompt(pos_texts, neg_texts, n_queries=5):
     """
-    Build a prompt that asks BioMistral to generate yes/no presence queries
-    that distinguish positive from negative examples. Includes a worked example.
+    Build a prompt that asks the LLM to generate yes/no presence queries
+    that distinguish positive (good fuel efficiency) from negative (bad fuel efficiency)
+    car descriptions in the MPG dataset.
     """
-    pos_block = "\n---\n".join([f"Report {i+1}: {t[:500]}" for i, t in enumerate(pos_texts)])
-    neg_block = "\n---\n".join([f"Report {i+1}: {t[:500]}" for i, t in enumerate(neg_texts)])
-    
-    prompt = f"""You are a medical AI assistant. Your task is to generate yes/no questions that distinguish two groups of radiology reports.
+    pos_block = "\n---\n".join([f"Car {i+1}: {t[:500]}" for i, t in enumerate(pos_texts)])
+    neg_block = "\n---\n".join([f"Car {i+1}: {t[:500]}" for i, t in enumerate(neg_texts)])
+
+    prompt = f"""You are an automotive data analyst. Your task is to generate yes/no questions that distinguish two groups of cars based on their described attributes.
+
+Each car is described using these attributes: number of cylinders, horsepower level, displacement level, weight, and acceleration.
 
 Rules:
-1. Only ask about findings EXPLICITLY STATED in the reports.
-2. Do NOT ask questions requiring clinical inference or diagnosis prediction.
+1. Only ask about attributes EXPLICITLY STATED in the car descriptions.
+2. Do NOT ask questions about fuel efficiency directly — that is the label you are trying to predict.
 3. Each question should have DIFFERENT answers for Group A vs Group B.
-5. Each question must cover a DIFFERENT medical concept — no redundancy.
+4. Each question must cover a DIFFERENT attribute or attribute value — no redundancy.
 
 Here is an example of how to do this:
 
-EXAMPLE GROUP A:
-Report 1: The patient has a central venous catheter. Bilateral pleural effusions are noted. Mild cardiomegaly.
-Report 2: There is a right-sided chest tube. Large pleural effusion on the left.
+EXAMPLE GROUP A (good fuel efficiency):
+Car 1: Car has 4 cylinders, low horsepower, low displacement, light weight, and fast acceleration.
+Car 2: Car has 4 cylinders, low horsepower, light weight, moderate acceleration, and low displacement.
 
-EXAMPLE GROUP B:
-Report 2: No acute cardiopulmonary abnormality. The lungs are well expanded and clear. No pleural effusion.
-Report 3: Clear lungs. No pleural effusion. The cardiac silhouette is within normal limits.
+EXAMPLE GROUP B (bad fuel efficiency):
+Car 1: Car has 8 cylinders, high horsepower, high displacement, heavy weight, and slow acceleration.
+Car 2: Car has 6 cylinders, medium horsepower, average weight, medium displacement, and fast acceleration.
 
 Good questions:
-- Does the report indicate that pleural effusion is present? (Group A: Yes, Yes. Group B: No, No — discriminative)
-_ Does the report indicate the patient has clear lungs? (Group A: No, No. Group B: Yes, Yes — discriminative)
+- Does the car have 4 cylinders? (Group A: Yes, Yes. Group B: No, No — discriminative)
+- Does the car have high horsepower? (Group A: No, No. Group B: Yes, No — discriminative)
 
 Bad questions:
-- Does the report indicate that the patient currently has a chest tube in place? (Group A: No,Yes. Group B: No, No — NOT discriminative)
-- Does the report mention pleural effusion? (Group A: Yes, Yes. Group B: Yes, Yes — NOT discriminative)
-- Is the patient likely to die? (This is inference, not a presence query — NOT allowed)
+- Does the car have fast acceleration? (Group A: Yes, No. Group B: No, Yes — NOT discriminative)
+- Does the car have low displacement? (Group A: Yes, Yes. Group B: Yes, Yes — NOT discriminative)
+- Does the car have good fuel efficiency? (This is the label itself — NOT allowed)
 
 
-Now do the same for these real reports:
+Now do the same for these real car descriptions:
 
-GROUP A:
+GROUP A (good fuel efficiency):
 {pos_block}
 
-GROUP B:
+GROUP B (bad fuel efficiency):
 {neg_block}
 
 Generate exactly {n_queries} yes/no questions where Group A and Group B would have DIFFERENT answers.
@@ -195,16 +198,16 @@ print(sample_neg)
 def build_answer_prompt(report_text, query):
     """
     Build a prompt that asks the LLM to answer a yes/no query
-    based on a radiology report.
+    based on a car description.
     """
-    prompt = f"""Read the following radiology report and answer the question.
+    prompt = f"""Read the following car description and answer the question.
 
-Report:
+Car description:
 {report_text[:800]}
 
 Question: {query}
 
-First, quote the most relevant sentence from the report. Then answer with exactly "Yes" or "No".
+First, quote the most relevant part of the car description. Then answer with exactly "Yes" or "No".
 """
     return prompt
 
