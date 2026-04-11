@@ -27,7 +27,7 @@ torch.manual_seed(SEED)
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 print(f"Using device: {DEVICE}")
 
-df = pd.read_csv("/scratch/ic2664/Query-ML-proj/data/mpg_simple_textual.txt")
+df = pd.read_csv("/scratch/ic2664/Query-ML/data/mpg_simple_textual.txt")
 df['text'] = df[df.columns[1:5]].astype(str).agg(" ".join, axis=1)
 df = df[['text', 'target', 'id']]
 
