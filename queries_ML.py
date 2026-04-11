@@ -27,9 +27,24 @@ torch.manual_seed(SEED)
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 print(f"Using device: {DEVICE}")
 
-df = pd.read_csv("/scratch/ic2664/Query-ML/data/mpg_simple_textual.txt")
-df['text'] = df[df.columns[1:5]].astype(str).agg(" ".join, axis=1)
-df = df[['text', 'target', 'id']]
+with open("/scratch/ic2664/Query-ML/data/mpg_simple_textual.txt") as f:
+    raw = f.read()
+
+records = []
+for i, block in enumerate(raw.strip().split("---")):
+    block = block.strip()
+    if not block:
+        continue
+    lines = block.splitlines()
+    input_line = next((l for l in lines if l.startswith("INPUT:")), None)
+    answer_line = next((l for l in lines if l.startswith("ANSWER:")), None)
+    if input_line and answer_line:
+        text = input_line.replace("INPUT:", "").strip()
+        answer = answer_line.replace("ANSWER:", "").strip()
+        target = 1 if "good fuel efficiency" in answer else 0
+        records.append({"id": i, "text": text, "target": target})
+
+df = pd.DataFrame(records)
 
 
 # Balance classes and sample working subset
