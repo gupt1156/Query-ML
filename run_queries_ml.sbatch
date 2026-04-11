@@ -17,6 +17,7 @@
 module purge
 module load anaconda3/2025.06
 source activate query-ml
+export PATH="/scratch/ic2664/.conda/envs/query-ml/bin:$PATH"
 
 # ── Working directory ─────────────────────────────────────────────────────────
 cd $SLURM_SUBMIT_DIR
@@ -30,6 +31,6 @@ echo "GPUs:       $CUDA_VISIBLE_DEVICES"
 nvidia-smi
 
 # ── Run ───────────────────────────────────────────────────────────────────────
-python queries_ML.py
+/scratch/ic2664/.conda/envs/query-ml/bin/python queries_ML.py
 
 echo "End time: $(date)"
