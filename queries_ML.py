@@ -6,7 +6,7 @@ import random
 from tqdm import tqdm
 
 import torch
-from transformers import AutoTokenizer, AutoModelForCausalLM, pipeline
+from transformers import AutoTokenizer, AutoModelForCausalLM, AutoProcessor
 
 from sklearn.tree import DecisionTreeClassifier, export_text, plot_tree
 from sklearn.ensemble import RandomForestClassifier
@@ -58,13 +58,18 @@ df_balanced = pd.concat([pos, neg]).sample(frac=1, random_state=SEED).reset_inde
 
 MODEL_PATH = "/scratch/ic2664/LLMs/Llama-4-Scout-17B-16E-Instruct"
 
-print("Loading tokenizer...")
-tokenizer = AutoTokenizer.from_pretrained(MODEL_PATH)
+print("Loading processor/tokenizer...")
+try:
+    processor = AutoProcessor.from_pretrained(MODEL_PATH)
+    tokenizer = processor.tokenizer
+except Exception:
+    processor = None
+    tokenizer = AutoTokenizer.from_pretrained(MODEL_PATH)
 
 print("Loading model...")
 model = AutoModelForCausalLM.from_pretrained(
     MODEL_PATH,
-    torch_dtype=torch.float16,
+    torch_dtype=torch.bfloat16,
     device_map="auto"
 )
 model.eval()
@@ -72,14 +77,16 @@ print("Model loaded.")
 
 
 def generate_text(prompt, max_new_tokens=512, temperature=0.3):
-    """Generation wrapper using Llama 4 chat template."""
-    messages = [{"role": "user", "content": prompt}]
-    inputs = tokenizer.apply_chat_template(
+    """Generation wrapper compatible with any HuggingFace chat model."""
+    messages = [{"role": "user", "content": [{"type": "text", "text": prompt}]}]
+    proc = processor if processor else tokenizer
+    inputs = proc.apply_chat_template(
         messages,
         add_generation_prompt=True,
+        tokenize=True,
         return_tensors="pt",
-        return_dict=True
-    ).to(DEVICE)
+        return_dict=True,
+    ).to(model.device)
 
     with torch.no_grad():
         outputs = model.generate(
@@ -89,8 +96,7 @@ def generate_text(prompt, max_new_tokens=512, temperature=0.3):
             do_sample=temperature > 0,
             pad_token_id=tokenizer.eos_token_id
         )
-    new_tokens = outputs[0][inputs['input_ids'].shape[1]:]
-    return tokenizer.decode(new_tokens, skip_special_tokens=True)
+    return proc.batch_decode(outputs[:, inputs["input_ids"].shape[-1]:], skip_special_tokens=True)[0]
 
 
 def build_query_generation_prompt(pos_texts, neg_texts, n_queries=5):
