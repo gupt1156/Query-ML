@@ -16,7 +16,7 @@
 # ── Environment ──────────────────────────────────────────────────────────────
 module purge
 module load anaconda3/2025.06
-conda activate query-ml
+source activate query-ml
 
 # ── Working directory ─────────────────────────────────────────────────────────
 cd $SLURM_SUBMIT_DIR
