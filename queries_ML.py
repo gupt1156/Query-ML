@@ -56,7 +56,7 @@ neg = df[df['target'] == 0].sample(n=N_PER_CLASS, random_state=SEED)
 df_balanced = pd.concat([pos, neg]).sample(frac=1, random_state=SEED).reset_index(drop=True)
 
 
-MODEL_PATH = "/scratch/ic2664/LLMs/Llama-4-Scout-17B-16E-Instruct"
+MODEL_PATH = "/scratch/ic2664/LLMs/Llama-3.1-8B-Instruct"
 
 print("Loading processor/tokenizer...")
 try:
@@ -78,7 +78,10 @@ print("Model loaded.")
 
 def generate_text(prompt, max_new_tokens=512, temperature=0.3):
     """Generation wrapper compatible with any HuggingFace chat model."""
-    messages = [{"role": "user", "content": [{"type": "text", "text": prompt}]}]
+    if processor:
+        messages = [{"role": "user", "content": [{"type": "text", "text": prompt}]}]
+    else:
+        messages = [{"role": "user", "content": prompt}]
     proc = processor if processor else tokenizer
     inputs = proc.apply_chat_template(
         messages,
