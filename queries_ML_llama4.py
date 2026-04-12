@@ -56,7 +56,7 @@ neg = df[df['target'] == 0].sample(n=N_PER_CLASS, random_state=SEED)
 df_balanced = pd.concat([pos, neg]).sample(frac=1, random_state=SEED).reset_index(drop=True)
 
 
-MODEL_PATH = "/scratch/ic2664/LLMs/Llama-3.1-8B-Instruct"
+MODEL_PATH = "/scratch/ic2664/LLMs/Llama-4-Scout-17B-16E-Instruct"
 
 print("Loading processor/tokenizer...")
 try:
@@ -113,45 +113,45 @@ def build_query_generation_prompt(pos_texts, neg_texts, n_queries=5):
 
     prompt = f"""You are an automotive data analyst. Your task is to generate yes/no questions that distinguish two groups of cars based on their described attributes.
 
-Each car is described using these attributes: number of cylinders, horsepower level, displacement level, weight, and acceleration.
+    Each car is described using these attributes: number of cylinders, horsepower level, displacement level, weight, and acceleration.
 
-Rules:
-1. Only ask about attributes EXPLICITLY STATED in the car descriptions.
-2. Do NOT ask questions about fuel efficiency directly — that is the label you are trying to predict.
-3. Each question should have DIFFERENT answers for Group A vs Group B.
-4. Each question must cover a DIFFERENT attribute or attribute value — no redundancy.
+    Rules:
+    1. Only ask about attributes EXPLICITLY STATED in the car descriptions.
+    2. Do NOT ask questions about fuel efficiency directly — that is the label you are trying to predict.
+    3. Each question should have DIFFERENT answers for Group A vs Group B.
+    4. Each question must cover a DIFFERENT attribute or attribute value — no redundancy.
 
-Here is an example of how to do this:
+    Here is an example of how to do this:
 
-EXAMPLE GROUP A (good fuel efficiency):
-Car 1: Car has 4 cylinders, low horsepower, low displacement, light weight, and fast acceleration.
-Car 2: Car has 4 cylinders, low horsepower, light weight, moderate acceleration, and low displacement.
+    EXAMPLE GROUP A (good fuel efficiency):
+    Car 1: Car has 4 cylinders, low horsepower, low displacement, light weight, and fast acceleration.
+    Car 2: Car has 4 cylinders, low horsepower, light weight, moderate acceleration, and low displacement.
 
-EXAMPLE GROUP B (bad fuel efficiency):
-Car 1: Car has 8 cylinders, high horsepower, high displacement, heavy weight, and slow acceleration.
-Car 2: Car has 6 cylinders, medium horsepower, average weight, medium displacement, and fast acceleration.
+    EXAMPLE GROUP B (bad fuel efficiency):
+    Car 1: Car has 8 cylinders, high horsepower, high displacement, heavy weight, and slow acceleration.
+    Car 2: Car has 6 cylinders, medium horsepower, average weight, medium displacement, and fast acceleration.
 
-Good questions:
-- Does the car have 4 cylinders? (Group A: Yes, Yes. Group B: No, No — discriminative)
-- Does the car have high horsepower? (Group A: No, No. Group B: Yes, No — discriminative)
+    Good questions:
+    - Does the car have 4 cylinders? (Group A: Yes, Yes. Group B: No, No — discriminative)
+    - Does the car have high horsepower? (Group A: No, No. Group B: Yes, No — discriminative)
 
-Bad questions:
-- Does the car have fast acceleration? (Group A: Yes, No. Group B: No, Yes — NOT discriminative)
-- Does the car have low displacement? (Group A: Yes, Yes. Group B: Yes, Yes — NOT discriminative)
-- Does the car have good fuel efficiency? (This is the label itself — NOT allowed)
+    Bad questions:
+    - Does the car have fast acceleration? (Group A: Yes, No. Group B: No, Yes — NOT discriminative)
+    - Does the car have low displacement? (Group A: Yes, Yes. Group B: Yes, Yes — NOT discriminative)
+    - Does the car have good fuel efficiency? (This is the label itself — NOT allowed)
 
 
-Now do the same for these real car descriptions:
+    Now do the same for these real car descriptions:
 
-GROUP A (good fuel efficiency):
-{pos_block}
+    GROUP A (good fuel efficiency):
+    {pos_block}
 
-GROUP B (bad fuel efficiency):
-{neg_block}
+    GROUP B (bad fuel efficiency):
+    {neg_block}
 
-Generate exactly {n_queries} yes/no questions where Group A and Group B would have DIFFERENT answers.
+    Generate exactly {n_queries} yes/no questions where Group A and Group B would have DIFFERENT answers.
 
-1."""
+    1."""
     return prompt
 
 def parse_queries(raw_text, expected_n=5):
@@ -226,13 +226,13 @@ def build_answer_prompt(report_text, query):
     """
     prompt = f"""Read the following car description and answer the question.
 
-Car description:
-{report_text[:800]}
+    Car description:
+    {report_text[:800]}
 
-Question: {query}
+    Question: {query}
 
-First, quote the most relevant part of the car description. Then answer with exactly "Yes" or "No".
-"""
+    First, quote the most relevant part of the car description. Then answer with exactly "Yes" or "No".
+    """
     return prompt
 
 
