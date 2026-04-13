@@ -6,7 +6,7 @@ import random
 from tqdm import tqdm
 
 import torch
-from transformers import AutoTokenizer, AutoProcessor, AutoModelForVision2Seq
+from transformers import AutoTokenizer, AutoProcessor, Qwen2_5_VLForConditionalGeneration
 
 from sklearn.tree import DecisionTreeClassifier, export_text, plot_tree
 from sklearn.ensemble import RandomForestClassifier
@@ -67,7 +67,7 @@ except Exception:
     tokenizer = AutoTokenizer.from_pretrained(MODEL_PATH)
 
 print("Loading model...")
-model = AutoModelForVision2Seq.from_pretrained(
+model = Qwen2_5_VLForConditionalGeneration.from_pretrained(
     MODEL_PATH,
     torch_dtype=torch.bfloat16,
     device_map="auto"
