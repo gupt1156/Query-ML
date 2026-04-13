@@ -6,7 +6,7 @@ import random
 from tqdm import tqdm
 
 import torch
-from transformers import AutoTokenizer, AutoProcessor, AutoModelForCausalLM
+from transformers import AutoTokenizer, AutoProcessor, Qwen3VLForConditionalGeneration
 
 from sklearn.tree import DecisionTreeClassifier, export_text, plot_tree
 from sklearn.ensemble import RandomForestClassifier
@@ -67,11 +67,10 @@ except Exception:
     tokenizer = AutoTokenizer.from_pretrained(MODEL_PATH)
 
 print("Loading model...")
-model = AutoModelForCausalLM.from_pretrained(
+model = Qwen3VLForConditionalGeneration.from_pretrained(
     MODEL_PATH,
-    torch_dtype=torch.bfloat16,
-    device_map="auto",
-    trust_remote_code=True
+    dtype=torch.bfloat16,
+    device_map="auto"
 )
 model.eval()
 print("Model loaded.")
