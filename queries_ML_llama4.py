@@ -6,7 +6,7 @@ import random
 from tqdm import tqdm
 
 import torch
-from transformers import AutoTokenizer, AutoModelForCausalLM, AutoProcessor
+from transformers import AutoTokenizer, AutoProcessor, Llama4ForConditionalGeneration
 
 from sklearn.tree import DecisionTreeClassifier, export_text, plot_tree
 from sklearn.ensemble import RandomForestClassifier
@@ -67,9 +67,9 @@ except Exception:
     tokenizer = AutoTokenizer.from_pretrained(MODEL_PATH)
 
 print("Loading model...")
-model = AutoModelForCausalLM.from_pretrained(
+model = Llama4ForConditionalGeneration.from_pretrained(
     MODEL_PATH,
-    torch_dtype=torch.bfloat16,
+    dtype=torch.bfloat16,
     device_map="auto"
 )
 model.eval()

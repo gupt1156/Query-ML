@@ -4,9 +4,9 @@
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=8
 #SBATCH --mem=64GB
-#SBATCH --gres=gpu:a100:1
+#SBATCH --gres=gpu:h100:4
 #SBATCH --time=12:00:00
-#SBATCH --partition=a100_tandon
+#SBATCH --partition=h100_tandon
 #SBATCH --output=logs/%x_%j.out
 #SBATCH --error=logs/%x_%j.err
 #SBATCH --mail-type=BEGIN,END,FAIL
