@@ -31,6 +31,7 @@ echo "GPUs:       $CUDA_VISIBLE_DEVICES"
 nvidia-smi
 
 # ── Run ───────────────────────────────────────────────────────────────────────
-/scratch/ic2664/.conda/envs/query-ml/bin/python queries_ML_llama4.py
+START_RUN=${START_RUN:-1}
+START_RUN=$START_RUN /scratch/ic2664/.conda/envs/query-ml/bin/python queries_ML_llama4.py
 
 echo "End time: $(date)"

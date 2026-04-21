@@ -255,6 +255,7 @@ def answer_queries_batch(texts, queries, desc="Answering queries"):
 N_RUNS = 5
 N_QUERIES = 5
 N_FEW_SHOT = 5  # pos/neg examples shown to LLM for query generation
+START_RUN = int(os.environ.get("START_RUN", 1))
 
 RESULTS_DIR = "results_llama4"
 os.makedirs(RESULTS_DIR, exist_ok=True)
@@ -265,7 +266,7 @@ all_labels = df_balanced['target'].tolist()
 
 run_summary = []
 
-for run_idx in range(N_RUNS):
+for run_idx in range(START_RUN - 1, N_RUNS):
     run_seed = SEED + run_idx
     print(f"\n{'='*60}")
     print(f"RUN {run_idx + 1}/{N_RUNS}  (seed={run_seed})")
