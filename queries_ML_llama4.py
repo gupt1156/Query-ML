@@ -1,8 +1,10 @@
+import os
 import pandas as pd
 import numpy as np
 import re
 import json
 import random
+from datetime import datetime
 from tqdm import tqdm
 
 import torch
@@ -203,27 +205,7 @@ def generate_queries(pos_texts, neg_texts, n_queries=5, debug=True):
     
     return queries[:n_queries]
 
-# --- Test query generation with a small sample ---
-sample_pos = pos['text'].sample(5, random_state=42).tolist()
-sample_neg = neg['text'].sample(5, random_state=42).tolist()
-
-test_queries = generate_queries(sample_pos, sample_neg, n_queries=5)
-print("Generated queries:")
-for i, q in enumerate(test_queries, 1):
-    print(f"  {i}. {q}")
-
-print("Positive samples:")
-print(sample_pos)
-
-
-print("Negative samples:")
-print(sample_neg)
-
 def build_answer_prompt(report_text, query):
-    """
-    Build a prompt that asks the LLM to answer a yes/no query
-    based on a car description.
-    """
     prompt = f"""Read the following car description and answer the question.
 
     Car description:
@@ -237,18 +219,14 @@ def build_answer_prompt(report_text, query):
 
 
 def answer_query(report_text, query):
-    """
-    Answer a single yes/no query for one report.
-    Returns 1 for Yes, 0 for No, np.nan if unclear.
-    """
+    """Returns 1 for Yes, 0 for No, np.nan if unclear."""
     prompt = build_answer_prompt(report_text, query)
     raw = generate_text(prompt, max_new_tokens=100, temperature=0.1)
     raw_lower = raw.strip().lower()
-    
-    # Look for the final Yes/No (after the reasoning)
+
     last_yes = raw_lower.rfind('yes')
     last_no = raw_lower.rfind('no')
-    
+
     if last_yes == -1 and last_no == -1:
         return np.nan
     elif last_yes == -1:
@@ -258,25 +236,102 @@ def answer_query(report_text, query):
     else:
         return 1 if last_yes > last_no else 0
 
+
 def answer_queries_batch(texts, queries, desc="Answering queries"):
-    """
-    For each text, answer all queries. Returns a DataFrame of shape (n_texts, n_queries)
-    with binary values (1=Yes, 0=No).
-    """
+    """Returns DataFrame of shape (n_texts, n_queries) with binary values."""
     results = []
     for text in tqdm(texts, desc=desc):
-        row = []
-        for query in queries:
-            ans = answer_query(text, query)
-            row.append(ans)
+        row = [answer_query(text, q) for q in queries]
         results.append(row)
-    
     feature_df = pd.DataFrame(results, columns=[f"Q{i}" for i in range(len(queries))])
     feature_df = feature_df.fillna(0).astype(int)
     return feature_df
 
-# --- Quick test: answer queries on a few reports ---
-test_texts = sample_pos + sample_neg
-test_features = answer_queries_batch(test_texts, test_queries, desc="Test answering")
-print(test_features)
-print(f"\nQuery labels: {test_queries}")
+
+# ============================================================
+# MULTI-RUN EXPERIMENT
+# ============================================================
+
+N_RUNS = 5
+N_QUERIES = 5
+N_FEW_SHOT = 5  # pos/neg examples shown to LLM for query generation
+
+RESULTS_DIR = "results_llama4"
+os.makedirs(RESULTS_DIR, exist_ok=True)
+timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+
+all_texts = df_balanced['text'].tolist()
+all_labels = df_balanced['target'].tolist()
+
+run_summary = []
+
+for run_idx in range(N_RUNS):
+    run_seed = SEED + run_idx
+    print(f"\n{'='*60}")
+    print(f"RUN {run_idx + 1}/{N_RUNS}  (seed={run_seed})")
+    print(f"{'='*60}")
+
+    run_dir = os.path.join(RESULTS_DIR, f"run_{run_idx + 1:02d}_{timestamp}")
+    os.makedirs(run_dir, exist_ok=True)
+
+    # Sample few-shot examples for query generation (different each run)
+    few_shot_pos = pos['text'].sample(N_FEW_SHOT, random_state=run_seed).tolist()
+    few_shot_neg = neg['text'].sample(N_FEW_SHOT, random_state=run_seed).tolist()
+
+    # Generate queries
+    queries = generate_queries(few_shot_pos, few_shot_neg, n_queries=N_QUERIES)
+    print(f"\nGenerated {len(queries)} queries:")
+    for i, q in enumerate(queries, 1):
+        print(f"  {i}. {q}")
+
+    # Save queries
+    with open(os.path.join(run_dir, "queries.json"), "w") as f:
+        json.dump({"run": run_idx + 1, "seed": run_seed, "queries": queries}, f, indent=2)
+
+    # Verify queries on full balanced dataset
+    print(f"\nVerifying on full dataset ({len(all_texts)} samples)...")
+    feature_df = answer_queries_batch(all_texts, queries, desc=f"Run {run_idx + 1} verification")
+    feature_df.insert(0, "target", all_labels)
+
+    # Save feature matrix
+    features_path = os.path.join(run_dir, "features.csv")
+    feature_df.to_csv(features_path, index=False)
+    print(f"Feature matrix saved: {features_path}")
+
+    # Per-query agreement with target (how discriminative each query is)
+    query_stats = []
+    for qi, q in enumerate(queries):
+        col = f"Q{qi}"
+        pos_rate = feature_df.loc[feature_df['target'] == 1, col].mean()
+        neg_rate = feature_df.loc[feature_df['target'] == 0, col].mean()
+        query_stats.append({
+            "query_idx": qi,
+            "query": q,
+            "yes_rate_positive_class": round(float(pos_rate), 3),
+            "yes_rate_negative_class": round(float(neg_rate), 3),
+            "discrimination": round(abs(float(pos_rate) - float(neg_rate)), 3),
+        })
+        print(f"  Q{qi}: pos_yes={pos_rate:.2f}, neg_yes={neg_rate:.2f}, disc={abs(pos_rate-neg_rate):.2f}  |  {q}")
+
+    with open(os.path.join(run_dir, "query_stats.json"), "w") as f:
+        json.dump(query_stats, f, indent=2)
+
+    nan_rate = feature_df.drop(columns=["target"]).isnull().mean().mean()
+    run_summary.append({
+        "run": run_idx + 1,
+        "seed": run_seed,
+        "n_queries_generated": len(queries),
+        "avg_discrimination": round(float(np.mean([s["discrimination"] for s in query_stats])), 3),
+        "nan_rate": round(float(nan_rate), 3),
+        "results_dir": run_dir,
+    })
+
+# Save overall summary
+summary_df = pd.DataFrame(run_summary)
+summary_path = os.path.join(RESULTS_DIR, f"summary_{timestamp}.csv")
+summary_df.to_csv(summary_path, index=False)
+
+print(f"\n{'='*60}")
+print(f"ALL RUNS COMPLETE")
+print(f"Summary saved to: {summary_path}")
+print(summary_df.to_string(index=False))
