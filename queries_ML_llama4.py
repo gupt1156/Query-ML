@@ -49,13 +49,7 @@ for i, block in enumerate(raw.strip().split("---")):
 df = pd.DataFrame(records)
 
 
-# Balance classes and sample working subset
-SEED = 41
 N_PER_CLASS = 2
-
-pos = df[df['target'] == 1].sample(n=N_PER_CLASS, random_state=SEED)
-neg = df[df['target'] == 0].sample(n=N_PER_CLASS, random_state=SEED)
-df_balanced = pd.concat([pos, neg]).sample(frac=1, random_state=SEED).reset_index(drop=True)
 
 
 MODEL_PATH = "/scratch/ic2664/LLMs/Llama-4-Scout-17B-16E-Instruct"
@@ -261,9 +255,6 @@ RESULTS_DIR = "results_llama4"
 os.makedirs(RESULTS_DIR, exist_ok=True)
 timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
 
-all_texts = df_balanced['text'].tolist()
-all_labels = df_balanced['target'].tolist()
-
 run_summary = []
 
 for run_idx in range(START_RUN - 1, N_RUNS):
@@ -275,9 +266,15 @@ for run_idx in range(START_RUN - 1, N_RUNS):
     run_dir = os.path.join(RESULTS_DIR, f"run_{run_idx + 1:02d}_{timestamp}")
     os.makedirs(run_dir, exist_ok=True)
 
-    # Sample few-shot examples for query generation (different each run)
-    few_shot_pos = pos['text'].sample(N_FEW_SHOT, random_state=run_seed).tolist()
-    few_shot_neg = neg['text'].sample(N_FEW_SHOT, random_state=run_seed).tolist()
+    # Sample fresh pos/neg examples each run
+    pos = df[df['target'] == 1].sample(n=N_PER_CLASS, random_state=run_seed)
+    neg = df[df['target'] == 0].sample(n=N_PER_CLASS, random_state=run_seed)
+    df_balanced = pd.concat([pos, neg]).sample(frac=1, random_state=run_seed).reset_index(drop=True)
+    all_texts = df_balanced['text'].tolist()
+    all_labels = df_balanced['target'].tolist()
+
+    few_shot_pos = pos['text'].tolist()
+    few_shot_neg = neg['text'].tolist()
 
     # Generate queries
     queries = generate_queries(few_shot_pos, few_shot_neg, n_queries=N_QUERIES)
