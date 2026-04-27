@@ -51,7 +51,7 @@ df = pd.DataFrame(records)
 
 # Balance classes and sample working subset
 SEED = 41
-N_PER_CLASS = 100  # 200 total — adjust based on your API budget
+N_PER_CLASS = 2
 
 pos = df[df['target'] == 1].sample(n=N_PER_CLASS, random_state=SEED)
 neg = df[df['target'] == 0].sample(n=N_PER_CLASS, random_state=SEED)
@@ -254,7 +254,7 @@ def answer_queries_batch(texts, queries, desc="Answering queries"):
 
 N_RUNS = 5
 N_QUERIES = 5
-N_FEW_SHOT = 5  # pos/neg examples shown to LLM for query generation
+N_FEW_SHOT = 2  # pos/neg examples shown to LLM for query generation
 START_RUN = int(os.environ.get("START_RUN", 1))
 
 RESULTS_DIR = "results_llama4"
