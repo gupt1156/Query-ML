@@ -1,0 +1,11 @@
+{
+  "run": 5,
+  "seed": 45,
+  "queries": [
+    "Does the car have 8 cylinders?",
+    "Does the car have high horsepower?",
+    "Does the car have heavy weight?",
+    "Does the car have slow acceleration?",
+    "Does the car have 4 cylinders?"
+  ]
+}

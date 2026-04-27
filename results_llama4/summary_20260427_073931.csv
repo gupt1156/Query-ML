@@ -1,0 +1,6 @@
+run,seed,n_queries_generated,avg_discrimination,nan_rate,results_dir
+1,41,5,1.0,0.0,results_llama4/run_01_20260427_073931
+2,42,5,1.0,0.0,results_llama4/run_02_20260427_073931
+3,43,5,0.9,0.0,results_llama4/run_03_20260427_073931
+4,44,5,1.0,0.0,results_llama4/run_04_20260427_073931
+5,45,5,1.0,0.0,results_llama4/run_05_20260427_073931

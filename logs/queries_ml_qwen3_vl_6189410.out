@@ -1,0 +1,62 @@
+Job ID:     6189410
+Node:       ga027
+Start time: Mon Apr 13 12:41:00 EDT 2026
+GPUs:       0
+Mon Apr 13 12:41:00 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 580.82.07              Driver Version: 580.82.07      CUDA Version: 13.0     |
++-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA A100-SXM4-80GB          On  |   00000000:CA:00.0 Off |                    0 |
+| N/A   26C    P0             61W /  500W |       0MiB /  81920MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+Using device: cuda
+Loading processor/tokenizer...
+Loading model...
+Model loaded.
+  Raw output:
+      ahhas Car  A A A has A A A A0.
+B A B has A A A A B B B B B0 B car
+ B has B B A A A B B A A BB A B H A A A B B A 
+A has A B bable
+## has having has had hadB has hasB B B##B.
+#####
+  P  has B
+ B A P B B A
+.
+ B A B B B B B B B          .
+ hases having and car  A                 A   B A    A     A A B   and                  A           A   .
+         and                b b A A A a
+ b   B A  
+         ## A   A A A A    ##                       ##    B       has.
+    0 A  A 
+ B   and A A A  B  A B A B B b b B B b   # b b b b b b b b b b b    A   A A A A 
+ b A B B A B 
+ B   B B B B
+##1 B A A
+ 
+
+  Parsed 0/5 queries
+Generated queries:
+Positive samples:
+['Car #92 has light weight, low horsepower, 4 cylinders, low displacement, and fast acceleration.', 'Car #279 has 4 cylinders, light weight, low horsepower, low displacement, and moderate acceleration.', 'Car #3 has moderate acceleration, 4 cylinders, low displacement, low horsepower, and light weight.', 'Car #50 has 4 cylinders, moderate acceleration, medium displacement, average weight, and medium horsepower.', 'Car #217 has medium horsepower, fast acceleration, low displacement, light weight, and 4 cylinders.']
+Negative samples:
+['Car #86 has high displacement, high horsepower, average weight, slow acceleration, and 6 cylinders.', 'Car #276 has high displacement, 8 cylinders, moderate acceleration, high horsepower, and heavy weight.', 'Car #7 has slow acceleration, high horsepower, high displacement, 8 cylinders, and heavy weight.', 'Car #45 has heavy weight, high horsepower, 8 cylinders, high displacement, and slow acceleration.', 'Car #190 has 8 cylinders, slow acceleration, high horsepower, high displacement, and heavy weight.']
+Empty DataFrame
+Columns: []
+Index: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+Query labels: []
+End time: Mon Apr 13 12:42:55 EDT 2026

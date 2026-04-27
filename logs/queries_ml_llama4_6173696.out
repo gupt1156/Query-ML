@@ -1,0 +1,85 @@
+Job ID:     6173696
+Node:       gh012
+Start time: Mon Apr 13 06:56:01 EDT 2026
+GPUs:       0,1,2,3
+Mon Apr 13 06:56:01 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 580.82.07              Driver Version: 580.82.07      CUDA Version: 13.0     |
++-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA H100 80GB HBM3          On  |   00000000:06:00.0 Off |                    0 |
+| N/A   24C    P0             68W /  700W |       0MiB /  81559MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+|   1  NVIDIA H100 80GB HBM3          On  |   00000000:26:00.0 Off |                    0 |
+| N/A   25C    P0             71W /  700W |       0MiB /  81559MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+|   2  NVIDIA H100 80GB HBM3          On  |   00000000:A6:00.0 Off |                    0 |
+| N/A   25C    P0             68W /  700W |       0MiB /  81559MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+|   3  NVIDIA H100 80GB HBM3          On  |   00000000:C6:00.0 Off |                    0 |
+| N/A   24C    P0             69W /  700W |       0MiB /  81559MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+Using device: cuda
+Loading processor/tokenizer...
+Loading model...
+Model loaded.
+  Raw output:
+Based on the car descriptions, here are 5 yes/no questions that distinguish Group A (good fuel efficiency) from Group B (bad fuel efficiency):
+
+1. Does the car have 8 cylinders? 
+   - Group A: No, No, No, No, No 
+   - Group B: No, Yes, Yes, Yes, Yes 
+
+2. Does the car have high horsepower? 
+   - Group A: No, No, No, No, No 
+   - Group B: Yes, Yes, Yes, Yes, Yes 
+
+3. Does the car have high displacement? 
+   - Group A: No, No, No, No, No 
+   - Group B: Yes, Yes, Yes, Yes, Yes 
+
+4. Does the car have heavy weight? 
+   - Group A: No, No, No, No, No 
+   - Group B: No, Yes, Yes, Yes, Yes 
+
+5. Does the
+  Parsed 5/5 queries
+Generated queries:
+  1. Does the car have 8 cylinders?
+  2. Does the car have high horsepower?
+  3. Does the car have high displacement?
+  4. Does the car have heavy weight?
+  5. Does the car have slow acceleration?
+Positive samples:
+['Car #92 has light weight, low horsepower, 4 cylinders, low displacement, and fast acceleration.', 'Car #279 has 4 cylinders, light weight, low horsepower, low displacement, and moderate acceleration.', 'Car #3 has moderate acceleration, 4 cylinders, low displacement, low horsepower, and light weight.', 'Car #50 has 4 cylinders, moderate acceleration, medium displacement, average weight, and medium horsepower.', 'Car #217 has medium horsepower, fast acceleration, low displacement, light weight, and 4 cylinders.']
+Negative samples:
+['Car #86 has high displacement, high horsepower, average weight, slow acceleration, and 6 cylinders.', 'Car #276 has high displacement, 8 cylinders, moderate acceleration, high horsepower, and heavy weight.', 'Car #7 has slow acceleration, high horsepower, high displacement, 8 cylinders, and heavy weight.', 'Car #45 has heavy weight, high horsepower, 8 cylinders, high displacement, and slow acceleration.', 'Car #190 has 8 cylinders, slow acceleration, high horsepower, high displacement, and heavy weight.']
+   Q0  Q1  Q2  Q3  Q4
+0   0   0   0   0   0
+1   0   0   0   0   0
+2   0   0   0   0   0
+3   0   0   0   0   0
+4   0   0   0   0   0
+5   0   1   1   0   1
+6   1   1   1   1   0
+7   1   1   1   1   1
+8   1   1   1   1   1
+9   1   1   1   1   1
+
+Query labels: ['Does the car have 8 cylinders?', 'Does the car have high horsepower?', 'Does the car have high displacement?', 'Does the car have heavy weight?', 'Does the car have slow acceleration?']
+End time: Mon Apr 13 07:06:48 EDT 2026

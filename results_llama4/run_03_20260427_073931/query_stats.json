@@ -1,0 +1,37 @@
+[
+  {
+    "query_idx": 0,
+    "query": "Does the car have 8 cylinders?",
+    "yes_rate_positive_class": 0.0,
+    "yes_rate_negative_class": 1.0,
+    "discrimination": 1.0
+  },
+  {
+    "query_idx": 1,
+    "query": "Does the car have high horsepower?",
+    "yes_rate_positive_class": 0.0,
+    "yes_rate_negative_class": 1.0,
+    "discrimination": 1.0
+  },
+  {
+    "query_idx": 2,
+    "query": "Does the car have fast acceleration?",
+    "yes_rate_positive_class": 1.0,
+    "yes_rate_negative_class": 0.0,
+    "discrimination": 1.0
+  },
+  {
+    "query_idx": 3,
+    "query": "Does the car have heavy weight?",
+    "yes_rate_positive_class": 0.0,
+    "yes_rate_negative_class": 1.0,
+    "discrimination": 1.0
+  },
+  {
+    "query_idx": 4,
+    "query": "Does the car have low horsepower?",
+    "yes_rate_positive_class": 0.5,
+    "yes_rate_negative_class": 0.0,
+    "discrimination": 0.5
+  }
+]

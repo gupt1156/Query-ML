@@ -1,0 +1,23 @@
+Traceback (most recent call last):
+  File "/scratch/ic2664/Query-ML/queries_ML.py", line 31, in <module>
+    df['text'] = df[df.columns[1:5]].astype(str).agg(" ".join, axis=1)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/scratch/ic2664/.conda/envs/query-ml/lib/python3.11/site-packages/pandas/core/frame.py", line 12034, in aggregate
+    result = op.agg()
+             ^^^^^^^^
+  File "/scratch/ic2664/.conda/envs/query-ml/lib/python3.11/site-packages/pandas/core/apply.py", line 1036, in agg
+    result = self.obj.apply(self.func, axis, args=self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/scratch/ic2664/.conda/envs/query-ml/lib/python3.11/site-packages/pandas/core/frame.py", line 12423, in apply
+    return op.apply().__finalize__(self, method="apply")
+           ^^^^^^^^^^
+  File "/scratch/ic2664/.conda/envs/query-ml/lib/python3.11/site-packages/pandas/core/apply.py", line 1015, in apply
+    return self.apply_standard()
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/scratch/ic2664/.conda/envs/query-ml/lib/python3.11/site-packages/pandas/core/apply.py", line 1167, in apply_standard
+    results, res_index = self.apply_series_generator()
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/scratch/ic2664/.conda/envs/query-ml/lib/python3.11/site-packages/pandas/core/apply.py", line 1183, in apply_series_generator
+    results[i] = self.func(v, *self.args, **self.kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: sequence item 0: expected str instance, float found

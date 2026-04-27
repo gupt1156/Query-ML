@@ -1,0 +1,191 @@
+Job ID:     6749096
+Node:       gh010
+Start time: Mon Apr 20 21:03:23 EDT 2026
+GPUs:       0,1,2,3
+Mon Apr 20 21:03:23 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 580.82.07              Driver Version: 580.82.07      CUDA Version: 13.0     |
++-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA H100 80GB HBM3          On  |   00000000:06:00.0 Off |                    0 |
+| N/A   24C    P0             68W /  700W |       0MiB /  81559MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+|   1  NVIDIA H100 80GB HBM3          On  |   00000000:26:00.0 Off |                    0 |
+| N/A   24C    P0             68W /  700W |       0MiB /  81559MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+|   2  NVIDIA H100 80GB HBM3          On  |   00000000:A6:00.0 Off |                    0 |
+| N/A   24C    P0             69W /  700W |       0MiB /  81559MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+|   3  NVIDIA H100 80GB HBM3          On  |   00000000:C6:00.0 Off |                    0 |
+| N/A   24C    P0             68W /  700W |       0MiB /  81559MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+Using device: cuda
+Loading processor/tokenizer...
+Loading model...
+Model loaded.
+
+============================================================
+RUN 1/5  (seed=41)
+============================================================
+  Raw output:
+Based on the car descriptions, here are 5 yes/no questions that distinguish Group A (good fuel efficiency) from Group B (bad fuel efficiency):
+
+1. Does the car have 8 cylinders?
+	* Group A: No, No, No, No, No
+	* Group B: Yes, Yes, Yes, No, Yes
+2. Does the car have high horsepower?
+	* Group A: No, No, No, No, No
+	* Group B: Yes, Yes, Yes, Yes, Yes
+3. Does the car have heavy weight?
+	* Group A: No, No, No, No, No
+	* Group B: Yes, Yes, Yes, No, Yes
+4. Does the car have low displacement?
+	* Group A: No, No, Yes, Yes, Yes
+	* Group B: No, No, No, No, No
+5. Does the car have slow acceleration?
+	* Gro
+  Parsed 5/5 queries
+
+Generated 5 queries:
+  1. Does the car have 8 cylinders?
+  2. Does the car have high horsepower?
+  3. Does the car have heavy weight?
+  4. Does the car have low displacement?
+  5. Does the car have slow acceleration?
+
+Verifying on full dataset (200 samples)...
+Feature matrix saved: results_llama4/run_01_20260420_211021/features.csv
+  Q0: pos_yes=0.02, neg_yes=0.56, disc=0.54  |  Does the car have 8 cylinders?
+  Q1: pos_yes=0.05, neg_yes=0.68, disc=0.63  |  Does the car have high horsepower?
+  Q2: pos_yes=0.03, neg_yes=0.66, disc=0.63  |  Does the car have heavy weight?
+  Q3: pos_yes=0.62, neg_yes=0.02, disc=0.60  |  Does the car have low displacement?
+  Q4: pos_yes=0.16, neg_yes=0.52, disc=0.36  |  Does the car have slow acceleration?
+
+============================================================
+RUN 2/5  (seed=42)
+============================================================
+  Raw output:
+Based on the provided car descriptions, here are 5 yes/no questions that distinguish Group A (good fuel efficiency) from Group B (bad fuel efficiency):
+
+1. Does the car have 8 cylinders?
+	* Group A: No, No, No, No, No
+	* Group B: No, Yes, Yes, Yes, Yes
+	* (Discriminative)
+
+2. Does the car have high horsepower?
+	* Group A: No, No, No, No, No
+	* Group B: Yes, Yes, Yes, Yes, Yes
+	* (Discriminative)
+
+3. Does the car have high displacement?
+	* Group A: No, No, No, No, No
+	* Group B: Yes, Yes, Yes, Yes, Yes
+	* (Discriminative)
+
+4. Does the car have heavy weight?
+	* Group A: No, No, No, No, No
+	* Gro
+  Parsed 5/5 queries
+
+Generated 5 queries:
+  1. Does the car have 8 cylinders?
+  2. Does the car have high horsepower?
+  3. Does the car have high displacement?
+  4. Does the car have heavy weight?
+  5. Does the car have slow acceleration?
+
+Verifying on full dataset (200 samples)...
+Feature matrix saved: results_llama4/run_02_20260420_211021/features.csv
+  Q0: pos_yes=0.02, neg_yes=0.56, disc=0.54  |  Does the car have 8 cylinders?
+  Q1: pos_yes=0.05, neg_yes=0.68, disc=0.63  |  Does the car have high horsepower?
+  Q2: pos_yes=0.02, neg_yes=0.63, disc=0.61  |  Does the car have high displacement?
+  Q3: pos_yes=0.03, neg_yes=0.66, disc=0.63  |  Does the car have heavy weight?
+  Q4: pos_yes=0.16, neg_yes=0.52, disc=0.36  |  Does the car have slow acceleration?
+
+============================================================
+RUN 3/5  (seed=43)
+============================================================
+  Raw output:
+After analyzing the car descriptions, I've generated 5 yes/no questions that distinguish Group A (good fuel efficiency) from Group B (bad fuel efficiency). Here they are:
+
+1. Does the car have 8 cylinders?
+	* Group A: No, No, No, No, Yes. 
+    *Corrected Answer 
+    * Group A: No, No, No, No, Yes 
+    * Group B: Yes, No, No, No, No 
+    The question is good.
+
+2. Does the car have high horsepower?
+	* Group A: No, No, Yes, No, Yes 
+	* Group B: Yes, Yes, Yes, No, No 
+    The question is good.
+
+3. Does the car have heavy weight?
+	* Group A: No, No, No, No, Yes 
+	* Group B: Yes, Yes, No, No, No 
+  
+  Parsed 5/5 queries
+
+Generated 5 queries:
+  1. Does the car have 8 cylinders?
+  2. Does the car have high horsepower?
+  3. Does the car have heavy weight?
+  4. Does the car have slow acceleration?
+  5. Does the car have 6 cylinders?
+
+Verifying on full dataset (200 samples)...
+Feature matrix saved: results_llama4/run_03_20260420_211021/features.csv
+  Q0: pos_yes=0.02, neg_yes=0.56, disc=0.54  |  Does the car have 8 cylinders?
+  Q1: pos_yes=0.05, neg_yes=0.68, disc=0.63  |  Does the car have high horsepower?
+  Q2: pos_yes=0.03, neg_yes=0.66, disc=0.63  |  Does the car have heavy weight?
+  Q3: pos_yes=0.16, neg_yes=0.52, disc=0.36  |  Does the car have slow acceleration?
+  Q4: pos_yes=0.07, neg_yes=0.32, disc=0.25  |  Does the car have 6 cylinders?
+
+============================================================
+RUN 4/5  (seed=44)
+============================================================
+  Raw output:
+Based on the provided car descriptions, here are 5 yes/no questions that distinguish Group A (good fuel efficiency) from Group B (bad fuel efficiency):
+
+1. Does the car have 8 cylinders? 
+   - Group A: No, No, No, No, No 
+   - Group B: Yes, No, Yes, No, No 
+
+2. Does the car have high horsepower? 
+   - Group A: No, No, No, No, No 
+   - Group B: Yes, Yes, Yes, No, No 
+
+3. Does the car have high displacement? 
+   - Group A: No, No, No, No, No 
+   - Group B: No, Yes, Yes, No, No 
+
+4. Does the car have heavy weight? 
+   - Group A: No, No, No, No, No 
+   - Group B: Yes, Yes, Yes, No, No 
+
+5. Does th
+  Parsed 5/5 queries
+
+Generated 5 queries:
+  1. Does the car have 8 cylinders?
+  2. Does the car have high horsepower?
+  3. Does the car have high displacement?
+  4. Does the car have heavy weight?
+  5. Does the car have 4 cylinders?
+
+Verifying on full dataset (200 samples)...

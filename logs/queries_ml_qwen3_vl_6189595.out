@@ -1,0 +1,71 @@
+Job ID:     6189595
+Node:       ga006
+Start time: Mon Apr 13 12:54:48 EDT 2026
+GPUs:       0
+Mon Apr 13 12:54:48 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 580.82.07              Driver Version: 580.82.07      CUDA Version: 13.0     |
++-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA A100-SXM4-80GB          On  |   00000000:E3:00.0 Off |                    0 |
+| N/A   25C    P0             62W /  500W |       0MiB /  81920MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+Using device: cuda
+Loading processor/tokenizer...
+Loading model...
+Model loaded.
+  Raw output:
+Does the car have 4 cylinders?  
+(Group A: Yes, Yes, Yes, Yes, Yes. Group B: No, No, No, No, No — discriminative)
+
+2.  
+Does the car have low horsepower?  
+(Group A: Yes, Yes, Yes, No, Yes. Group B: No, No, No, No, No — discriminative)
+
+3.  
+Does the car have low displacement?  
+(Group A: Yes, Yes, Yes, No, Yes. Group B: No, No, No, No, No — discriminative)
+
+4.  
+Does the car have light weight?  
+(Group A: Yes, Yes, Yes, No, Yes. Group B: No, No, No, No, No — discriminative)
+
+5.  
+Does the car have fast acceleration?  
+(Group A: Yes, Yes, No, No, Yes. Group B: No, No, No, No, No — discriminati
+  Parsed 4/5 queries
+Generated queries:
+  1. Does the car have low horsepower?
+  2. Does the car have low displacement?
+  3. Does the car have light weight?
+  4. Does the car have fast acceleration?
+Positive samples:
+['Car #92 has light weight, low horsepower, 4 cylinders, low displacement, and fast acceleration.', 'Car #279 has 4 cylinders, light weight, low horsepower, low displacement, and moderate acceleration.', 'Car #3 has moderate acceleration, 4 cylinders, low displacement, low horsepower, and light weight.', 'Car #50 has 4 cylinders, moderate acceleration, medium displacement, average weight, and medium horsepower.', 'Car #217 has medium horsepower, fast acceleration, low displacement, light weight, and 4 cylinders.']
+Negative samples:
+['Car #86 has high displacement, high horsepower, average weight, slow acceleration, and 6 cylinders.', 'Car #276 has high displacement, 8 cylinders, moderate acceleration, high horsepower, and heavy weight.', 'Car #7 has slow acceleration, high horsepower, high displacement, 8 cylinders, and heavy weight.', 'Car #45 has heavy weight, high horsepower, 8 cylinders, high displacement, and slow acceleration.', 'Car #190 has 8 cylinders, slow acceleration, high horsepower, high displacement, and heavy weight.']
+   Q0  Q1  Q2  Q3
+0   1   1   1   1
+1   1   1   1   0
+2   1   1   1   0
+3   0   0   0   0
+4   0   1   1   1
+5   0   0   0   0
+6   0   0   0   0
+7   0   0   0   0
+8   0   0   0   0
+9   0   0   0   0
+
+Query labels: ['Does the car have low horsepower?', 'Does the car have low displacement?', 'Does the car have light weight?', 'Does the car have fast acceleration?']
+End time: Mon Apr 13 12:57:12 EDT 2026
