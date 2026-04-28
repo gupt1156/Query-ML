@@ -5,7 +5,7 @@
 #SBATCH --cpus-per-task=8
 #SBATCH --mem=64GB
 #SBATCH --gres=gpu:h100:4
-#SBATCH --time=12:00:00
+#SBATCH --time=01:00:00
 #SBATCH --partition=h100_tandon
 #SBATCH --output=logs/%x_%j.out
 #SBATCH --error=logs/%x_%j.err
