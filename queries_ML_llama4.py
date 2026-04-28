@@ -49,7 +49,7 @@ for i, block in enumerate(raw.strip().split("---")):
 df = pd.DataFrame(records)
 
 
-N_PER_CLASS = 2
+N_PER_CLASS = 1
 
 
 MODEL_PATH = "/scratch/ic2664/LLMs/Llama-4-Scout-17B-16E-Instruct"
@@ -248,7 +248,7 @@ def answer_queries_batch(texts, queries, desc="Answering queries"):
 
 N_RUNS = 5
 N_QUERIES = 5
-N_FEW_SHOT = 2  # pos/neg examples shown to LLM for query generation
+N_FEW_SHOT = 1  # pos/neg examples shown to LLM for query generation
 START_RUN = int(os.environ.get("START_RUN", 1))
 
 RESULTS_DIR = "results_llama4"
