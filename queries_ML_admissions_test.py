@@ -4,6 +4,7 @@ import numpy as np
 import re
 import json
 import random
+import yaml
 from datetime import datetime
 from tqdm import tqdm
 
@@ -29,27 +30,69 @@ torch.manual_seed(SEED)
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 print(f"Using device: {DEVICE}")
 
-with open("/scratch/ic2664/Query-ML/data/mpg_simple_textual.txt") as f:
-    raw = f.read()
+# Load config
+with open("data/admissions/config.yaml") as f:
+    config = yaml.safe_load(f)
 
+# Load train data
+with open("data/admissions/admission_train.json") as f:
+    data = json.load(f)
+
+# Assuming all feature lists are the same length
+n_samples = len(data["math"])
 records = []
-for i, block in enumerate(raw.strip().split("---")):
-    block = block.strip()
-    if not block:
-        continue
-    lines = block.splitlines()
-    input_line = next((l for l in lines if l.startswith("INPUT:")), None)
-    answer_line = next((l for l in lines if l.startswith("ANSWER:")), None)
-    if input_line and answer_line:
-        text = input_line.replace("INPUT:", "").strip()
-        answer = answer_line.replace("ANSWER:", "").strip()
-        target = 1 if "good fuel efficiency" in answer else 0
-        records.append({"id": i, "text": text, "target": target})
+for i in range(n_samples):
+    record = {key: data[key][i] for key in data.keys()}
+    # Create observation text using template (excluding label for fair evaluation)
+    obs_template = """Here's a student's info:
+        Math grade: ${math}
+        Number of publications: ${num_publications}
+        Number of recommendation letters: ${num_letters}
+        Number of extracurricular activities: ${num_activities}
+        Science grade: ${science}
+        Art grade: ${art}
+        Community service hours: ${community_service_hours}
+        Sports participation: ${sports_participation}
+        """
+    observation = obs_template.replace("${math}", str(record["math"])) \
+                              .replace("${num_publications}", str(record["num_publications"])) \
+                              .replace("${num_letters}", str(record["num_letters"])) \
+                              .replace("${num_activities}", str(record["num_activities"])) \
+                              .replace("${science}", str(record["science"])) \
+                              .replace("${art}", str(record["art"])) \
+                              .replace("${community_service_hours}", str(record["community_service_hours"])) \
+                              .replace("${sports_participation}", str(record["sports_participation"]))
+    records.append({"id": i, "text": observation, "target": record["admission_distractor_10"]})
 
-df = pd.DataFrame(records)
+# Load test data
+with open("data/admissions/admission_test.json") as f:
+    test_data = json.load(f)
 
+test_records = []
+for i in range(len(test_data["math"])):
+    record = {key: test_data[key][i] for key in test_data.keys()}
+    # Create observation text using template (excluding label for fair evaluation)
+    obs_template = """Here's a student's info:
+        Math grade: ${math}
+        Number of publications: ${num_publications}
+        Number of recommendation letters: ${num_letters}
+        Number of extracurricular activities: ${num_activities}
+        Science grade: ${science}
+        Art grade: ${art}
+        Community service hours: ${community_service_hours}
+        Sports participation: ${sports_participation}
+        """
+    observation = obs_template.replace("${math}", str(record["math"])) \
+                              .replace("${num_publications}", str(record["num_publications"])) \
+                              .replace("${num_letters}", str(record["num_letters"])) \
+                              .replace("${num_activities}", str(record["num_activities"])) \
+                              .replace("${science}", str(record["science"])) \
+                              .replace("${art}", str(record["art"])) \
+                              .replace("${community_service_hours}", str(record["community_service_hours"])) \
+                              .replace("${sports_participation}", str(record["sports_participation"]))
+    test_records.append({"id": i, "text": observation, "target": record["admission_distractor_10"]})
 
-N_PER_CLASS = 2
+test_df = pd.DataFrame(test_records)
 
 
 MODEL_PATH = "/scratch/ic2664/LLMs/Llama-4-Scout-17B-16E-Instruct"
@@ -101,48 +144,44 @@ def generate_text(prompt, max_new_tokens=512, temperature=0.3):
 def build_query_generation_prompt(pos_texts, neg_texts, n_queries=5):
     """
     Build a prompt that asks the LLM to generate yes/no presence queries
-    that distinguish positive (good fuel efficiency) from negative (bad fuel efficiency)
-    car descriptions in the MPG dataset.
+    that distinguish admitted from non-admitted students in the admissions dataset.
     """
-    pos_block = "\n---\n".join([f"Car {i+1}: {t[:500]}" for i, t in enumerate(pos_texts)])
-    neg_block = "\n---\n".join([f"Car {i+1}: {t[:500]}" for i, t in enumerate(neg_texts)])
+    pos_block = "\n---\n".join([f"Student {i+1}: {t[:500]}" for i, t in enumerate(pos_texts)])
+    neg_block = "\n---\n".join([f"Student {i+1}: {t[:500]}" for i, t in enumerate(neg_texts)])
 
-    prompt = f"""You are an automotive data analyst. Your task is to generate yes/no questions that distinguish two groups of cars based on their described attributes.
-
-    Each car is described using these attributes: number of cylinders, horsepower level, displacement level, weight, and acceleration.
+    prompt = f"""You are a university admissions officer. Your task is to generate yes/no questions that distinguish two groups of students based on their described profiles.
 
     Rules:
-    1. Only ask about attributes EXPLICITLY STATED in the car descriptions.
-    2. Do NOT ask questions about fuel efficiency directly — that is the label you are trying to predict.
+    1. Only ask about attributes EXPLICITLY STATED in the student profiles.
+    2. Do NOT ask questions about admission directly — that is the label you are trying to predict.
     3. Each question should have DIFFERENT answers for Group A vs Group B.
     4. Each question must cover a DIFFERENT attribute or attribute value — no redundancy.
 
     Here is an example of how to do this:
 
-    EXAMPLE GROUP A (good fuel efficiency):
-    Car 1: Car has 4 cylinders, low horsepower, low displacement, light weight, and fast acceleration.
-    Car 2: Car has 4 cylinders, low horsepower, light weight, moderate acceleration, and low displacement.
+    EXAMPLE GROUP A (admitted students):
+    Student 1: Student has A in math, 5 publications, 3 recommendation letters, 4 extracurricular activities, A in science, B in art, 20 community service hours, and participates in 2 sports.
+    Student 2: Student has B in math, 2 publications, 2 recommendation letters, 3 extracurricular activities, A in science, A in art, 15 community service hours, and participates in 1 sport.
 
-    EXAMPLE GROUP B (bad fuel efficiency):
-    Car 1: Car has 8 cylinders, high horsepower, high displacement, heavy weight, and slow acceleration.
-    Car 2: Car has 6 cylinders, medium horsepower, average weight, medium displacement, and fast acceleration.
+    EXAMPLE GROUP B (non-admitted students):
+    Student 1: Student has C in math, 0 publications, 1 recommendation letter, 1 extracurricular activity, C in science, D in art, 5 community service hours, and participates in 0 sports.
+    Student 2: Student has D in math, 1 publication, 1 recommendation letter, 2 extracurricular activities, B in science, C in art, 10 community service hours, and participates in 1 sport.
 
     Good questions:
-    - Does the car have 4 cylinders? (Group A: Yes, Yes. Group B: No, No — discriminative)
-    - Does the car have high horsepower? (Group A: No, No. Group B: Yes, No — discriminative)
+    - Does the student have an A in math? (Group A: Yes, No. Group B: No, No — discriminative)
+    - Does the student have more than 2 publications? (Group A: Yes, No. Group B: No, No — discriminative)
 
     Bad questions:
-    - Does the car have fast acceleration? (Group A: Yes, No. Group B: No, Yes — NOT discriminative)
-    - Does the car have low displacement? (Group A: Yes, Yes. Group B: Yes, Yes — NOT discriminative)
-    - Does the car have good fuel efficiency? (This is the label itself — NOT allowed)
+    - Does the student have 3 recommendation letters? (Group A: Yes, No. Group B: No, No — NOT discriminative)
+    - Does the student have an A in science? (Group A: Yes, Yes. Group B: No, No — NOT discriminative)
+    - Is the student admitted? (This is the label itself — NOT allowed)
 
+    Now do the same for these real student profiles:
 
-    Now do the same for these real car descriptions:
-
-    GROUP A (good fuel efficiency):
+    GROUP A (admitted students):
     {pos_block}
 
-    GROUP B (bad fuel efficiency):
+    GROUP B (non-admitted students):
     {neg_block}
 
     Generate exactly {n_queries} yes/no questions where Group A and Group B would have DIFFERENT answers.
@@ -200,14 +239,14 @@ def generate_queries(pos_texts, neg_texts, n_queries=5, debug=True):
     return queries[:n_queries]
 
 def build_answer_prompt(report_text, query):
-    prompt = f"""Read the following car description and answer the question.
+    prompt = f"""Read the following student profile and answer the question.
 
-    Car description:
+    Student profile:
     {report_text[:800]}
 
     Question: {query}
 
-    First, quote the most relevant part of the car description. Then answer with exactly "Yes" or "No".
+    First, quote the most relevant part of the student profile. Then answer with exactly "Yes" or "No".
     """
     return prompt
 
@@ -251,7 +290,7 @@ N_QUERIES = 5
 N_FEW_SHOT = 2  # pos/neg examples shown to LLM for query generation
 START_RUN = int(os.environ.get("START_RUN", 1))
 
-RESULTS_DIR = "results_llama4"
+RESULTS_DIR = "results_admission"
 os.makedirs(RESULTS_DIR, exist_ok=True)
 timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
 
@@ -286,10 +325,12 @@ for run_idx in range(START_RUN - 1, N_RUNS):
     with open(os.path.join(run_dir, "queries.json"), "w") as f:
         json.dump({"run": run_idx + 1, "seed": run_seed, "queries": queries}, f, indent=2)
 
-    # Verify queries on full balanced dataset
-    print(f"\nVerifying on full dataset ({len(all_texts)} samples)...")
-    feature_df = answer_queries_batch(all_texts, queries, desc=f"Run {run_idx + 1} verification")
-    feature_df.insert(0, "target", all_labels)
+    # Evaluate queries on test dataset
+    test_texts = test_df['text'].tolist()
+    test_labels = test_df['target'].tolist()
+    print(f"\nEvaluating on test dataset ({len(test_texts)} samples)...")
+    feature_df = answer_queries_batch(test_texts, queries, desc=f"Run {run_idx + 1} test evaluation")
+    feature_df.insert(0, "target", test_labels)
 
     # Save feature matrix
     features_path = os.path.join(run_dir, "features.csv")
