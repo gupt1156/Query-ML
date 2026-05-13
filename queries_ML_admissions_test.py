@@ -92,6 +92,7 @@ for i in range(len(test_data["math"])):
                               .replace("${sports_participation}", str(record["sports_participation"]))
     test_records.append({"id": i, "text": observation, "target": record["admission_distractor_10"]})
 
+df = pd.DataFrame(records)
 test_df = pd.DataFrame(test_records)
 
 
@@ -306,11 +307,8 @@ for run_idx in range(START_RUN - 1, N_RUNS):
     os.makedirs(run_dir, exist_ok=True)
 
     # Sample fresh pos/neg examples each run
-    pos = df[df['target'] == 1].sample(n=N_PER_CLASS, random_state=run_seed)
-    neg = df[df['target'] == 0].sample(n=N_PER_CLASS, random_state=run_seed)
-    df_balanced = pd.concat([pos, neg]).sample(frac=1, random_state=run_seed).reset_index(drop=True)
-    all_texts = df_balanced['text'].tolist()
-    all_labels = df_balanced['target'].tolist()
+    pos = df[df['target'] == 1].sample(n=N_FEW_SHOT, random_state=run_seed)
+    neg = df[df['target'] == 0].sample(n=N_FEW_SHOT, random_state=run_seed)
 
     few_shot_pos = pos['text'].tolist()
     few_shot_neg = neg['text'].tolist()
