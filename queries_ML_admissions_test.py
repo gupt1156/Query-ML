@@ -62,7 +62,8 @@ for i in range(n_samples):
                               .replace("${art}", str(record["art"])) \
                               .replace("${community_service_hours}", str(record["community_service_hours"])) \
                               .replace("${sports_participation}", str(record["sports_participation"]))
-    records.append({"id": i, "text": observation, "target": record["admission_distractor_10"]})
+    label = 1 if record["admission_distractor_10"] == "admitted" else 0
+    records.append({"id": i, "text": observation, "target": label})
 
 # Load test data
 with open("data/admissions/admission_test.json") as f:
@@ -90,7 +91,8 @@ for i in range(len(test_data["math"])):
                               .replace("${art}", str(record["art"])) \
                               .replace("${community_service_hours}", str(record["community_service_hours"])) \
                               .replace("${sports_participation}", str(record["sports_participation"]))
-    test_records.append({"id": i, "text": observation, "target": record["admission_distractor_10"]})
+    label = 1 if record["admission_distractor_10"] == "admitted" else 0
+    test_records.append({"id": i, "text": observation, "target": label})
 
 df = pd.DataFrame(records)
 test_df = pd.DataFrame(test_records)
