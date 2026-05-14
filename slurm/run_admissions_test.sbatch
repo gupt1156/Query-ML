@@ -4,7 +4,7 @@
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=8
 #SBATCH --mem=64GB
-#SBATCH --gres=gpu:h100:4
+#SBATCH --gres=gpu:h100:1
 #SBATCH --time=01:00:00
 #SBATCH --partition=h100_tandon
 #SBATCH --output=/scratch/ic2664/Query-ML/logs/%x_%j.out
