@@ -7,8 +7,8 @@
 #SBATCH --gres=gpu:h100:4
 #SBATCH --time=01:00:00
 #SBATCH --partition=h100_tandon
-#SBATCH --output=logs/%x_%j.out
-#SBATCH --error=logs/%x_%j.err
+#SBATCH --output=/scratch/ic2664/Query-ML/logs/%x_%j.out
+#SBATCH --error=/scratch/ic2664/Query-ML/logs/%x_%j.err
 #SBATCH --mail-type=BEGIN,END,FAIL
 #SBATCH --mail-user=ic2664@nyu.edu
 #SBATCH --account=torch_pr_599_tandon_advanced
@@ -23,7 +23,7 @@ export PATH="/scratch/ic2664/.conda/envs/query-ml/bin:$PATH"
 cd $SLURM_SUBMIT_DIR
 
 # ── Logging ───────────────────────────────────────────────────────────────────
-mkdir -p logs
+mkdir -p /scratch/ic2664/Query-ML/logs
 echo "Job ID:     $SLURM_JOB_ID"
 echo "Node:       $SLURMD_NODENAME"
 echo "Start time: $(date)"
