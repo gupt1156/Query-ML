@@ -32,6 +32,6 @@ nvidia-smi
 
 # ── Run ───────────────────────────────────────────────────────────────────────
 START_RUN=${START_RUN:-1}
-START_RUN=$START_RUN /scratch/ic2664/.conda/envs/query-ml/bin/python queries_ML_admissions_test.py
+START_RUN=$START_RUN /scratch/ic2664/.conda/envs/query-ml/bin/python /scratch/ic2664/Query-ML/queries_ML_admissions_test.py
 
 echo "End time: $(date)"
