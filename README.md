@@ -47,24 +47,28 @@ $$\text{Ground Truth: } \text{Admitted} \iff \text{Math} = \text{'A'}$$
 
 ---
 
-## Codebase Architecture
+## Codebase Structure
 
 ```
 Query-ML/
 ├── run.py                 # Multi-seed CLI experiment orchestrator & serialization
-├── run_parallel.slurm     # Slurm array batch execution script for cluster nodes
+├── requirements.txt       # Project python dependencies
 ├── src/
 │   ├── __init__.py        # Public package API exports
 │   ├── dataset.py         # Synthetic dataset loader, text formatter, and causal rules
 │   ├── evaluate.py        # Accuracy, ROC-AUC, causal recovery, and depth precision
 │   ├── generator.py       # vLLM inference engine, contrastive sampling, and caching
 │   ├── prompts.py         # 7-rule domain-agnostic meta-prompts & verification templates
+│   ├── reliability.py     # Evaluation & reliability testing
 │   └── tree.py            # Recursive inductive decision tree, entropy, and Mermaid export
-└── data/
-    └── admissions/        # Synthetic admissions benchmark dataset files
+├── scripts/
+│   ├── slurm/             # SLURM cluster execution jobs (.slurm)
+│   └── analysis/          # Seed aggregation, BFS summarization, and plotting scripts
+├── data/
+│   ├── admissions/        # Synthetic admissions benchmark dataset files
+│   └── deceptive_reviews/ # Deceptive hotel reviews benchmark dataset
+└── docs/                  # Documentation, paper, and notes
 ```
-
----
 
 ## Quickstart
 
