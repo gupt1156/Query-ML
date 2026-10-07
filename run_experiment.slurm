@@ -12,44 +12,51 @@
 #SBATCH --array=1-10%5
 
 # -----------------------------------------------------------------------------
-# Configuration (Dynamic paths: works for any user out of the box)
+# Configuration (Self-contained and portable for any user)
 # -----------------------------------------------------------------------------
 cd "${SLURM_SUBMIT_DIR:-.}"
 
-USER_SCRATCH="/scratch/${USER}"
-SHARED_SCRATCH="/scratch/rvg9413"
-
-# Set up local directories
-export TMPDIR="${USER_SCRATCH}/tmp"
-mkdir -p logs results "${TMPDIR}"
-
-# 1. Environment: Use user env if available, otherwise fallback to shared env
-if [ -d "${USER_SCRATCH}/.conda/envs/query-ml" ]; then
-    CONDA_ENV="${USER_SCRATCH}/.conda/envs/query-ml"
-elif [ -d "${HOME}/.conda/envs/query-ml" ]; then
-    CONDA_ENV="${HOME}/.conda/envs/query-ml"
+# Temporary scratch and model cache directories
+if [ -d "/scratch/${USER}" ]; then
+    SCRATCH_DIR="/scratch/${USER}"
+elif [ -n "${SLURM_TMPDIR}" ] && [ -d "${SLURM_TMPDIR}" ]; then
+    SCRATCH_DIR="${SLURM_TMPDIR}"
 else
-    CONDA_ENV="${SHARED_SCRATCH}/.conda/envs/query-ml"
+    SCRATCH_DIR="${HOME}/scratch"
 fi
 
-export PATH="${CONDA_ENV}/bin:${PATH}"
-PYTHON_BIN="${CONDA_ENV}/bin/python"
+export TMPDIR="${SCRATCH_DIR}/tmp"
+export HF_HOME="${SCRATCH_DIR}/.cache/huggingface"
+mkdir -p logs results "${TMPDIR}" "${HF_HOME}"
 
-# 2. Model: Use shared pre-downloaded Qwen model checkpoint if available
-SHARED_MODEL="${SHARED_SCRATCH}/.cache/huggingface/hub/models--Qwen--Qwen2.5-7B-Instruct/snapshots/a09a35458c702b33eeacc393d103063234e8bc28"
-
-if [ -d "${SHARED_MODEL}" ]; then
-    MODEL_PATH="${SHARED_MODEL}"
-    export HF_HOME="${SHARED_SCRATCH}/.cache/huggingface"
-    export HF_HUB_OFFLINE=1
-    export TRANSFORMERS_OFFLINE=1
-    export HF_DATASETS_OFFLINE=1
-else
-    MODEL_PATH="Qwen/Qwen2.5-7B-Instruct"
-    export HF_HOME="${USER_SCRATCH}/.cache/huggingface"
+# Environment activation:
+# Activate conda environment 'query-ml' if conda is available
+if command -v conda &> /dev/null; then
+    eval "$(conda shell.bash hook)"
+    conda activate query-ml 2>/dev/null || true
+elif [ -f "${HOME}/miniconda3/etc/profile.d/conda.sh" ]; then
+    source "${HOME}/miniconda3/etc/profile.d/conda.sh"
+    conda activate query-ml 2>/dev/null || true
+elif [ -f "${HOME}/anaconda3/etc/profile.d/conda.sh" ]; then
+    source "${HOME}/anaconda3/etc/profile.d/conda.sh"
+    conda activate query-ml 2>/dev/null || true
 fi
 
-# 3. vLLM execution settings
+# Locate python binary
+if [ -n "${CONDA_PREFIX}" ]; then
+    PYTHON_BIN="${CONDA_PREFIX}/bin/python"
+elif [ -x "${HOME}/.conda/envs/query-ml/bin/python" ]; then
+    PYTHON_BIN="${HOME}/.conda/envs/query-ml/bin/python"
+elif [ -x "/scratch/${USER}/.conda/envs/query-ml/bin/python" ]; then
+    PYTHON_BIN="/scratch/${USER}/.conda/envs/query-ml/bin/python"
+else
+    PYTHON_BIN="$(command -v python3 || command -v python)"
+fi
+
+# Model identifier (defaults to Hugging Face Hub, auto-downloaded on first run)
+MODEL_NAME="${MODEL_NAME:-Qwen/Qwen2.5-7B-Instruct}"
+
+# vLLM runtime settings
 export VLLM_USE_FLASHINFER_SAMPLER=0
 export VLLM_ATTENTION_BACKEND=FLASH_ATTN
 export PYTHONUNBUFFERED=1
@@ -64,7 +71,8 @@ SEED=${SEEDS[$IDX]}
 
 echo "Running Query-ML on $(hostname) with seed ${SEED}..."
 echo "Using Python: ${PYTHON_BIN}"
-echo "Using Model:  ${MODEL_PATH}"
+echo "Using Model:  ${MODEL_NAME}"
+echo "HF_HOME:      ${HF_HOME}"
 
 ${PYTHON_BIN} -u run.py \
     --task_type contextual \
@@ -77,5 +85,5 @@ ${PYTHON_BIN} -u run.py \
     --max_correlation 0.85 \
     --majority_votes 5 \
     --regimes local \
-    --model_name "${MODEL_PATH}" \
+    --model_name "${MODEL_NAME}" \
     --output_dir results/contextual_runs

@@ -10,7 +10,8 @@ Active hypothesis generation and interpretable decision-tree induction using Lar
 Query-ML/
 ├── run.py                 # CLI experiment orchestrator & multi-seed evaluation
 ├── run_experiment.slurm   # SLURM batch job script for GPU cluster execution
-├── requirements.txt       # Python dependencies
+├── environment.yml        # Conda environment specification
+├── requirements.txt       # Python package dependencies
 ├── src/
 │   ├── __init__.py        # Package exports
 │   ├── dataset.py         # Dataset loaders, text formatters, and ground-truth rules
@@ -27,8 +28,20 @@ Query-ML/
 
 ## Getting Started
 
-### 1. Installation (Standalone / Local Machine)
+### 1. Environment Setup
 
+Clone the repository and set up the Python environment using either Conda or Pip:
+
+#### Option A: Using Conda (Recommended)
+```bash
+git clone https://github.com/gupt1156/Query-ML.git
+cd Query-ML
+
+conda env create -f environment.yml
+conda activate query-ml
+```
+
+#### Option B: Using Pip
 ```bash
 git clone https://github.com/gupt1156/Query-ML.git
 cd Query-ML
@@ -38,9 +51,15 @@ conda activate query-ml
 pip install -r requirements.txt
 ```
 
-### 2. Running Local Experiments
+### 2. Model Weights & Cache
 
-Run the contextual benchmark across seeds using local or global regimes:
+By default, Query-ML uses [`Qwen/Qwen2.5-7B-Instruct`](https://huggingface.co/Qwen/Qwen2.5-7B-Instruct).
+- On the first run, vLLM will automatically download the model weights (~15GB) into your Hugging Face cache directory (`$HF_HOME`, defaulting to `~/.cache/huggingface` or `/scratch/${USER}/.cache/huggingface`).
+- If you already have model weights downloaded locally, you can specify them via `--model_name /path/to/model/checkpoint`.
+
+### 3. Running Local Experiments
+
+Run the contextual benchmark across seeds:
 
 ```bash
 # Contextual Admissions Benchmark
@@ -54,24 +73,21 @@ python run.py --task_type original --seeds 42,52,62 --min_ig 1e-5
 
 ## HPC & Cluster Execution (SLURM)
 
-To submit array jobs to an HPC cluster (e.g. NYU Torch / Greene with NVIDIA L40S):
+To submit array jobs to an HPC cluster (e.g., NYU Torch / Greene with NVIDIA L40S GPUs):
 
 ```bash
 sbatch run_experiment.slurm
 ```
 
-Logs and checkpoints will be output to `logs/` and `results/`.
+Logs will be saved to `logs/` and experiment checkpoints to `results/`.
 
-### Zero-Configuration Cluster Setup
+### Fully Portable & Autonomous Cluster Setup
 
-The execution script (`run_experiment.slurm`) is located in the root directory and designed to run **out-of-the-box with zero manual setup** for NYU cluster users:
-
-1. **Dynamic Path Detection & Fallbacks**:
-   - **`TMPDIR`**: Automatically uses `/scratch/${USER}/tmp` (created dynamically if it does not already exist).
-   - **Conda Environment**: Automatically checks if the user has an environment at `/scratch/${USER}/.conda/envs/query-ml` or `~/.conda/envs/query-ml`. If neither is found, it automatically falls back to the shared environment at `/scratch/rvg9413/.conda/envs/query-ml`.
-   - **Hugging Face Model Cache**: Checks for pre-cached Qwen-2.5-7B-Instruct weights at `/scratch/rvg9413/.cache/huggingface/...`. If found, it runs fully offline without requiring collaborators to re-download 15 GB of weights. If run on external clusters, it falls back to standard Hugging Face Hub downloads.
-   - **Working Directory**: Automatically executes in `${SLURM_SUBMIT_DIR:-.}`, ensuring logs and checkpoints are written to whichever directory the user submitted the job from.
-   - **Partition & Allocation**: Uses `--partition=l40s_public` without hardcoded accounts, allowing any authorized user to run immediately under their default SLURM allocation.
-
-2. **Cluster Permissions**:
-   - Shared directories on `/scratch/rvg9413` are configured with world-traversal permissions (`chmod o+x`) and NFSv4 ACLs (`A::EVERYONE@:rxtncy`), enabling collaborator read access to the pre-built environment and model cache without permission conflicts.
+`run_experiment.slurm` is fully self-contained and requires **no hardcoded paths or shared scratch access**:
+- **Automatic Scratch Directory**: Sets `TMPDIR` and `HF_HOME` to `/scratch/${USER}` (or `${SLURM_TMPDIR}` / `$HOME/scratch` if running on non-NYU clusters).
+- **Environment Auto-Activation**: Automatically locates and activates the `query-ml` conda environment from your user environment.
+- **Model Download & Caching**: Downloads and caches `Qwen/Qwen2.5-7B-Instruct` into the running user's scratch directory on first execution, requiring zero access to any other user's files.
+- **Custom Models**: You can override the default model at launch time:
+  ```bash
+  MODEL_NAME="/path/to/custom/weights" sbatch run_experiment.slurm
+  ```

@@ -136,16 +136,9 @@ class FastVLLMEngine:
         model_name: str = "Qwen/Qwen2.5-7B-Instruct",
         gpu_memory_utilization: float = 0.85
     ):
-        local_cluster_snapshot = (
-            "/scratch/rvg9413/.cache/huggingface/hub/"
-            "models--Qwen--Qwen2.5-7B-Instruct/snapshots/"
-            "a09a35458c702b33eeacc393d103063234e8bc28"
-        )
-        resolved_model_path = local_cluster_snapshot if os.path.exists(local_cluster_snapshot) else model_name
-
-        print(f"Initializing FastVLLMEngine with model: {resolved_model_path}")
+        print(f"Initializing FastVLLMEngine with model: {model_name}")
         self.llm = LLM(
-            model=resolved_model_path,
+            model=model_name,
             tensor_parallel_size=1,
             gpu_memory_utilization=gpu_memory_utilization,
             max_model_len=1024,
