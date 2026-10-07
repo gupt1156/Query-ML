@@ -80,14 +80,3 @@ sbatch run_experiment.slurm
 ```
 
 Logs will be saved to `logs/` and experiment checkpoints to `results/`.
-
-### Fully Portable & Autonomous Cluster Setup
-
-`run_experiment.slurm` is fully self-contained and requires **no hardcoded paths or shared scratch access**:
-- **Automatic Scratch Directory**: Sets `TMPDIR` and `HF_HOME` to `/scratch/${USER}` (or `${SLURM_TMPDIR}` / `$HOME/scratch` if running on non-NYU clusters).
-- **Environment Auto-Activation**: Automatically locates and activates the `query-ml` conda environment from your user environment.
-- **Model Download & Caching**: Downloads and caches `Qwen/Qwen2.5-7B-Instruct` into the running user's scratch directory on first execution, requiring zero access to any other user's files.
-- **Custom Models**: You can override the default model at launch time:
-  ```bash
-  MODEL_NAME="/path/to/custom/weights" sbatch run_experiment.slurm
-  ```
