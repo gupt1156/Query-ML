@@ -19,9 +19,6 @@ Query-ML/
 │   ├── prompts.py         # Domain-agnostic query generation and verification prompts
 │   ├── reliability.py     # Self-consistency and query verification tests
 │   └── tree.py            # Decision tree induction, Shannon entropy, and visualization
-├── scripts/
-│   ├── slurm/             # Additional SLURM execution scripts
-│   └── analysis/          # Result aggregation and plotting utilities
 ├── data/                  # Benchmark datasets (Admissions, Deceptive Reviews)
 └── docs/                  # Research paper and reference notes
 ```
@@ -67,7 +64,7 @@ Logs and checkpoints will be output to `logs/` and `results/`.
 
 ### Zero-Configuration Cluster Setup
 
-The execution script (`run_experiment.slurm` and `scripts/slurm/run_experiment.slurm`) is designed to run **out-of-the-box with zero manual setup** for NYU cluster users:
+The execution script (`run_experiment.slurm`) is located in the root directory and designed to run **out-of-the-box with zero manual setup** for NYU cluster users:
 
 1. **Dynamic Path Detection & Fallbacks**:
    - **`TMPDIR`**: Automatically uses `/scratch/${USER}/tmp` (created dynamically if it does not already exist).
