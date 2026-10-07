@@ -1,25 +1,24 @@
 # Query-ML: Statistical LLM Query-Based Decision Tree Induction
 
-Query-ML implements active hypothesis generation and interpretable decision-tree induction using Large Language Models (LLMs). It empirically compares two fundamental statistical learning regimes:
+Query-ML implements active hypothesis generation and interpretable decision-tree induction using Large Language Models (LLMs). It compares two statistical learning regimes:
 
 1. **Global Regime (Static Feature Bank):**
-   - Samples $M$ contrastive subsets across the entire unpartitioned dataset upfront.
-   - Generates a fixed candidate query pool $Q = \{q_1, \dots, q_K\}$.
+   - Samples contrastive subsets across the unpartitioned dataset upfront to generate candidate queries.
    - Evaluates all candidate queries across records to build a global binary feature matrix.
    - Fits a standard CART Decision Tree classifier on the resulting static table.
-   - **Vulnerability:** Highly susceptible to distractor features that exhibit spurious global correlations, failing to capture subtle local subgroup interactions.
+   - **Vulnerability:** Prone to selecting distractor features that exhibit spurious global correlations, missing fine-grained subpopulation interactions.
 
 2. **Local Regime (Adaptive Subpopulation Conditioning):**
-   - Dynamically proposes targeted, contrastive yes/no queries at each individual tree node.
-   - Queries are formulated strictly by contrastively sampling records that have reached the active partition ($D_v$).
-   - Evaluates Shannon Information Gain ($IG$) locally to identify the split that maximizes subgroup entropy reduction.
-   - **Advantage:** Preserves subpopulation nuance, reliably recovers multi-track disjunctive rules, and suppresses distractor collapse.
+   - Dynamically generates targeted contrastive yes/no queries at each tree node.
+   - Queries are formulated using records conditioned on the active partition ($D_v$).
+   - Maximizes Shannon Information Gain ($IG$) locally to identify splits that reduce subgroup entropy.
+   - **Advantage:** Preserves subpopulation nuance, recovers disjunctive rules, and suppresses distractor collapse.
 
 ---
 
-## 10-Seed Benchmark Suite Results (NVIDIA L40S Cluster)
+## Benchmark Results (NVIDIA L40S Cluster)
 
-Evaluated across 10 random seeds: `[42, 52, 62, 72, 82, 92, 102, 112, 122, 132]`.
+Evaluated across 10 random seeds (`[42, 52, 62, 72, 82, 92, 102, 112, 122, 132]`):
 
 ### 1. Contextual Admissions Benchmark (Dual-Track Subgroups)
 $$\text{Ground Truth: } \text{Admitted} \iff (\text{Math} = \text{'A'} \land \text{Publications} \ge 1) \lor (\text{Math} \ne \text{'A'} \land \text{Activities} \ge 2)$$
@@ -43,47 +42,63 @@ $$\text{Ground Truth: } \text{Admitted} \iff \text{Math} = \text{'A'}$$
 | **Causal Recovery Rate** | $80.0\%$ | **$100.0\%$** | **$+20.0\%$** |
 | **Distractor Split Rate** | $20.0\%$ | **$3.3\%$** | **$-16.7\%$** |
 
-*(Note: Global regime suffered distractor collapse on Seeds 92 and 132, dropping to ~49% accuracy by selecting spurious community service hours, whereas Local achieved 100.0% accuracy on all 10 seeds).*
-
 ---
 
-## Codebase Structure
+## Repository Structure
 
 ```
 Query-ML/
-├── run.py                 # Multi-seed CLI experiment orchestrator & serialization
-├── requirements.txt       # Project python dependencies
+├── run.py                     # CLI experiment orchestrator & multi-seed evaluation
+├── requirements.txt           # Python dependencies
 ├── src/
-│   ├── __init__.py        # Public package API exports
-│   ├── dataset.py         # Synthetic dataset loader, text formatter, and causal rules
-│   ├── evaluate.py        # Accuracy, ROC-AUC, causal recovery, and depth precision
-│   ├── generator.py       # vLLM inference engine, contrastive sampling, and caching
-│   ├── prompts.py         # 7-rule domain-agnostic meta-prompts & verification templates
-│   ├── reliability.py     # Evaluation & reliability testing
-│   └── tree.py            # Recursive inductive decision tree, entropy, and Mermaid export
+│   ├── __init__.py            # Package exports
+│   ├── dataset.py             # Dataset loaders, text formatters, and ground-truth rules
+│   ├── evaluate.py            # Evaluation metrics (Accuracy, ROC-AUC, Causal Recovery)
+│   ├── generator.py           # vLLM inference engine, batch prompting, and caching
+│   ├── prompts.py             # Domain-agnostic query generation and verification prompts
+│   ├── reliability.py         # Self-consistency and query verification tests
+│   └── tree.py                # Decision tree induction, Shannon entropy, and visualization
 ├── scripts/
-│   ├── slurm/             # SLURM cluster execution jobs (.slurm)
-│   └── analysis/          # Seed aggregation, BFS summarization, and plotting scripts
-├── data/
-│   ├── admissions/        # Synthetic admissions benchmark dataset files
-│   └── deceptive_reviews/ # Deceptive hotel reviews benchmark dataset
-└── docs/                  # Documentation, paper, and notes
+│   ├── slurm/
+│   │   └── run_experiment.slurm # SLURM job script for GPU cluster execution
+│   └── analysis/              # Result aggregation and plotting utilities
+├── data/                      # Benchmark datasets (Admissions, Deceptive Reviews)
+└── docs/                      # Research paper and reference notes
 ```
 
-## Quickstart
+---
 
-### Environment Setup
+## Getting Started
+
+### 1. Installation
+
 ```bash
+git clone https://github.com/gupt1156/Query-ML.git
+cd Query-ML
+
 conda create -n query-ml python=3.11 -y
 conda activate query-ml
-pip install vllm pandas numpy networkx scikit-learn matplotlib
+pip install -r requirements.txt
 ```
 
-### Running Experiments
+### 2. Running Local Experiments
+
+Run the contextual benchmark across seeds using local or global regimes:
+
 ```bash
-# Run Contextual Admissions across 10 seeds
-python run.py --task_type contextual --seeds 42,52,62,72,82,92,102,112,122,132
+# Contextual Admissions Benchmark
+python run.py --task_type contextual --seeds 42,52,62 --regimes local global
 
-# Run Original Admissions across 10 seeds
-python run.py --task_type original --seeds 42,52,62,72,82,92,102,112,122,132 --min_ig 1e-5
+# Original Admissions Benchmark
+python run.py --task_type original --seeds 42,52,62 --min_ig 1e-5
 ```
+
+### 3. Running on SLURM Cluster
+
+To submit array jobs to an HPC cluster (e.g. NYU Torch / Greene with NVIDIA L40S):
+
+```bash
+sbatch scripts/slurm/run_experiment.slurm
+```
+
+Results and logs will be written to `results/` and `logs/`.
