@@ -1,0 +1,28 @@
+# Python artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Environment & caches
+.env
+.venv
+env/
+venv/
+.cache/
+
+# SLURM logs & temporary files
+logs/
+*.out
+*.err
+tmp/
+
+# Experiment results (large data/json artifacts)
+results/
+
+# Archive directory
+archive/
+
+# Cluster management orchestration
+src/cluster_manager.py
+cluster_manager.py

@@ -1,4 +1,0 @@
-Traceback (most recent call last):
-  File "/scratch/ic2664/Query-ML/queries_ML_qwen3_vl.py", line 9, in <module>
-    from transformers import AutoTokenizer, AutoProcessor, AutoModelForVision2Seq
-ImportError: cannot import name 'AutoModelForVision2Seq' from 'transformers' (/scratch/ic2664/.conda/envs/query-ml/lib/python3.11/site-packages/transformers/__init__.py)
