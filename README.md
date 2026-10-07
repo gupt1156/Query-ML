@@ -62,3 +62,6 @@ sbatch run_experiment.slurm
 ```
 
 Logs and checkpoints will be output to `logs/` and `results/`.
+
+> **Note for NYU Torch Users:**
+> `run_experiment.slurm` works out-of-the-box with **zero setup**. It dynamically auto-detects your user scratch directory, links to the shared conda environment, and uses the pre-cached Qwen model checkpoint from `/scratch/rvg9413/` so you do not need to reinstall dependencies or download model weights.
