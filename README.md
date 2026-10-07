@@ -79,4 +79,10 @@ To submit array jobs to an HPC cluster (e.g., NYU Torch / Greene with NVIDIA L40
 sbatch run_experiment.slurm
 ```
 
+To run with a custom model or local weights:
+
+```bash
+MODEL_NAME="/path/to/custom/weights" sbatch run_experiment.slurm
+```
+
 Logs will be saved to `logs/` and experiment checkpoints to `results/`.
