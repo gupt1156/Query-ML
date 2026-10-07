@@ -30,7 +30,7 @@ Query-ML/
 
 ## Getting Started
 
-### 1. Installation
+### 1. Installation (Standalone / Local Machine)
 
 ```bash
 git clone https://github.com/gupt1156/Query-ML.git
@@ -53,7 +53,9 @@ python run.py --task_type contextual --seeds 42,52,62 --regimes local global
 python run.py --task_type original --seeds 42,52,62 --min_ig 1e-5
 ```
 
-### 3. Running on SLURM Cluster
+---
+
+## HPC & Cluster Execution (SLURM)
 
 To submit array jobs to an HPC cluster (e.g. NYU Torch / Greene with NVIDIA L40S):
 
@@ -63,5 +65,16 @@ sbatch run_experiment.slurm
 
 Logs and checkpoints will be output to `logs/` and `results/`.
 
-> **Note for NYU Torch Users:**
-> `run_experiment.slurm` works out-of-the-box with **zero setup**. It dynamically auto-detects your user scratch directory, links to the shared conda environment, and uses the pre-cached Qwen model checkpoint from `/scratch/rvg9413/` so you do not need to reinstall dependencies or download model weights.
+### Zero-Configuration Cluster Setup
+
+The execution script (`run_experiment.slurm` and `scripts/slurm/run_experiment.slurm`) is designed to run **out-of-the-box with zero manual setup** for NYU cluster users:
+
+1. **Dynamic Path Detection & Fallbacks**:
+   - **`TMPDIR`**: Automatically uses `/scratch/${USER}/tmp` (created dynamically if it does not already exist).
+   - **Conda Environment**: Automatically checks if the user has an environment at `/scratch/${USER}/.conda/envs/query-ml` or `~/.conda/envs/query-ml`. If neither is found, it automatically falls back to the shared environment at `/scratch/rvg9413/.conda/envs/query-ml`.
+   - **Hugging Face Model Cache**: Checks for pre-cached Qwen-2.5-7B-Instruct weights at `/scratch/rvg9413/.cache/huggingface/...`. If found, it runs fully offline without requiring collaborators to re-download 15 GB of weights. If run on external clusters, it falls back to standard Hugging Face Hub downloads.
+   - **Working Directory**: Automatically executes in `${SLURM_SUBMIT_DIR:-.}`, ensuring logs and checkpoints are written to whichever directory the user submitted the job from.
+   - **Partition & Allocation**: Uses `--partition=l40s_public` without hardcoded accounts, allowing any authorized user to run immediately under their default SLURM allocation.
+
+2. **Cluster Permissions**:
+   - Shared directories on `/scratch/rvg9413` are configured with world-traversal permissions (`chmod o+x`) and NFSv4 ACLs (`A::EVERYONE@:rxtncy`), enabling collaborator read access to the pre-built environment and model cache without permission conflicts.
