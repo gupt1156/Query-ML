@@ -1,15 +1,16 @@
 #!/bin/bash
 #SBATCH --job-name=qml_experiment
+#SBATCH --account=torch_pr_599_tandon_advanced
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=8
 #SBATCH --mem=48GB
-#SBATCH --partition=l40s_public
+#SBATCH --partition=h200_tandon,h200_public,l40s_public
 #SBATCH --gres=gpu:1
 #SBATCH --time=00:30:00
 #SBATCH --output=logs/%x_%A_%a.out
 #SBATCH --error=logs/%x_%A_%a.err
-#SBATCH --array=1-10%5
+#SBATCH --array=1-5%5
 
 # -----------------------------------------------------------------------------
 # Configuration (Self-contained and portable for any user)
@@ -55,6 +56,8 @@ fi
 
 # Model identifier (defaults to Hugging Face Hub, auto-downloaded on first run)
 MODEL_NAME="${MODEL_NAME:-Qwen/Qwen2.5-7B-Instruct}"
+MAJORITY_VOTES="${MAJORITY_VOTES:-5}"
+OUTPUT_DIR="${OUTPUT_DIR:-results/vllm_regimes_maj${MAJORITY_VOTES}}"
 
 # vLLM runtime settings
 export VLLM_USE_FLASHINFER_SAMPLER=0
@@ -63,27 +66,35 @@ export PYTHONUNBUFFERED=1
 export VLLM_WORKER_MULTIPROC_METHOD=spawn
 
 # -----------------------------------------------------------------------------
-# Experiment Execution
+# Experiment Execution (50 seeds across 5 array tasks = 10 seeds per GPU job,
+# amortizing vLLM model load and cross-seed record vote cache)
 # -----------------------------------------------------------------------------
-SEEDS=(42 52 62 72 82 92 102 112 122 132)
+SEED_GROUPS=(
+    "42,52,62,72,82,92,102,112,122,132"
+    "142,152,162,172,182,192,202,212,222,232"
+    "242,252,262,272,282,292,302,312,322,332"
+    "342,352,362,372,382,392,402,412,422,432"
+    "442,452,462,472,482,492,502,512,522,532"
+)
 IDX=$((SLURM_ARRAY_TASK_ID - 1))
-SEED=${SEEDS[$IDX]}
+SEEDS="${SEED_GROUPS[$IDX]}"
 
-echo "Running Query-ML on $(hostname) with seed ${SEED}..."
+echo "Running Query-ML on $(hostname) with seeds: ${SEEDS}..."
 echo "Using Python: ${PYTHON_BIN}"
 echo "Using Model:  ${MODEL_NAME}"
 echo "HF_HOME:      ${HF_HOME}"
 
 ${PYTHON_BIN} -u run.py \
-    --task_type contextual \
-    --seeds ${SEED} \
-    --global_M 6 \
+    --seeds ${SEEDS} \
     --local_m 6 \
     --k_queries 5 \
     --max_depth 3 \
     --min_ig 0.01 \
-    --max_correlation 0.85 \
-    --majority_votes 5 \
-    --regimes local \
+    --majority_votes "${MAJORITY_VOTES}" \
+    --min_unanimous_consistency 0.80 \
+    --min_high_consistency 0.90 \
+    --min_error_reduction 2 \
     --model_name "${MODEL_NAME}" \
-    --output_dir results/contextual_runs
+    --output_dir "${OUTPUT_DIR}"
+
+

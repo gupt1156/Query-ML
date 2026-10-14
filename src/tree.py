@@ -1,63 +1,61 @@
 """
-Unified Decision Tree Estimator for Natural Language Queries.
-
-This module provides inductive decision tree learning over text data using LLM queries:
-1. Local Regime: Adaptively generates contrastive queries conditioned on local node
-   subpopulations (D_v), isolating causal subgroup features without dilution.
-2. Global Regime: Generates a static query pool globally upfront and learns a CART tree,
-   exposing the failure modes of global pooling under distractor features.
-3. Non-Redundant Tree Induction: Eliminates repetitive and contradictory questions
-   via branch-level ancestor conditioning, attribute-level uniqueness, and correlation pruning.
+Inductive Decision Tree Estimator over Natural Language Queries.
 """
 
 import math
 from typing import Any, Dict, List, Optional, Tuple
 
-import networkx as nx
 import numpy as np
 import pandas as pd
-from sklearn.tree import DecisionTreeClassifier
 
-from src.dataset import classify_query, is_causal
-from src.evaluate import compute_metrics
 from src.generator import FastVLLMEngine
-
-__all__ = ["QueryDecisionTree", "classify_query", "is_causal", "compute_metrics"]
+from src.utils import (
+    classify_query,
+    compute_metrics,
+    compute_vote_consistency,
+    normalize_query_for_dedup,
+    parse_query_semantics,
+)
 
 
 def compute_shannon_entropy(labels: np.ndarray) -> float:
     if len(labels) == 0:
         return 0.0
     p = float(np.mean(labels))
-    if p <= 0.0 or p >= 1.0:
-        return 0.0
-    return float(- p * math.log2(p) - (1.0 - p) * math.log2(1.0 - p))
+    return 0.0 if (p <= 0.0 or p >= 1.0) else float(-p * math.log2(p) - (1.0 - p) * math.log2(1.0 - p))
 
 
-def compute_split_gain(
-    labels: np.ndarray,
-    binary_mask: np.ndarray,
-    parent_entropy: float
-) -> Tuple[float, int, int]:
-    total_samples = len(labels)
-    positive_mask = (binary_mask == 1)
-    negative_mask = (binary_mask == 0)
+def compute_split_gain(labels: np.ndarray, binary_mask: np.ndarray, parent_entropy: float) -> Tuple[float, int, int]:
+    total = len(labels)
+    pos_mask, neg_mask = (binary_mask == 1), (binary_mask == 0)
+    c_pos, c_neg = int(pos_mask.sum()), int(neg_mask.sum())
+    if c_pos == 0 or c_neg == 0:
+        return 0.0, c_pos, c_neg
+    child_ent = (c_pos / total) * compute_shannon_entropy(labels[pos_mask]) + (c_neg / total) * compute_shannon_entropy(labels[neg_mask])
+    return float(parent_entropy - child_ent), c_pos, c_neg
 
-    count_positive = int(positive_mask.sum())
-    count_negative = int(negative_mask.sum())
 
-    if count_positive == 0 or count_negative == 0:
-        return 0.0, count_positive, count_negative
+def is_logically_consistent_with_branch(candidate_query: str, branch_history: List[Tuple[str, int]]) -> bool:
+    """Verifies that a candidate query is neither a paraphrase nor logically contradictory along the branch."""
+    if not branch_history:
+        return True
+    cand_norm = normalize_query_for_dedup(candidate_query)
+    cand_sem = parse_query_semantics(candidate_query)
 
-    entropy_pos = compute_shannon_entropy(labels[positive_mask])
-    entropy_neg = compute_shannon_entropy(labels[negative_mask])
-
-    weighted_child_entropy = (
-        (count_positive / total_samples) * entropy_pos
-        + (count_negative / total_samples) * entropy_neg
-    )
-    information_gain = parent_entropy - weighted_child_entropy
-    return float(information_gain), count_positive, count_negative
+    for anc_query, branch_taken in branch_history:
+        if normalize_query_for_dedup(anc_query) == cand_norm:
+            return False
+        anc_sem = parse_query_semantics(anc_query)
+        if cand_sem is not None and anc_sem is not None:
+            cat, op, val = cand_sem
+            anc_cat, anc_op, anc_val = anc_sem
+            if cat == anc_cat:
+                if op == "==" or anc_op == "==":
+                    return False
+                if op == ">=" and anc_op == ">=":
+                    if val == anc_val or (branch_taken == 0 and val >= anc_val) or (branch_taken == 1 and val <= anc_val):
+                        return False
+    return True
 
 
 def find_optimal_split_query(
@@ -65,398 +63,204 @@ def find_optimal_split_query(
     answers_df: pd.DataFrame,
     labels: np.ndarray,
     min_information_gain: float,
-    task_type: str,
-    ancestor_queries: Optional[List[str]] = None,
-    ancestor_answers_df: Optional[pd.DataFrame] = None,
-    max_correlation: float = 0.85,
-    allow_same_attribute: bool = False
+    raw_votes_dict: Optional[Dict[str, Optional[np.ndarray]]] = None,
+    min_unanimous_consistency: float = 0.80,
+    min_high_consistency: float = 0.90,
+    min_leaf_samples: int = 2,
 ) -> Optional[Dict[str, Any]]:
-    """
-    Identifies the query that maximizes Shannon Information Gain while enforcing:
-    1. Attribute uniqueness: prevents re-splitting on an attribute already in this branch.
-    2. Decorrelation: rejects candidates with |Pearson correlation| > max_correlation.
-    3. Minimum information gain constraint.
-    """
     parent_entropy = compute_shannon_entropy(labels)
-    best_query: Optional[str] = None
-    best_gain: float = -1.0
-    best_mask: Optional[np.ndarray] = None
-    best_category: Optional[str] = None
+    best_split: Optional[Dict[str, Any]] = None
+    best_score: float = -1.0
 
-    anc_queries = ancestor_queries or []
-    anc_categories = {classify_query(q, task_type=task_type) for q in anc_queries}
-
-    for query_idx, query_text in enumerate(candidate_queries):
-        category = classify_query(query_text, task_type=task_type)
-
-        # 1. Attribute-level non-redundancy check
-        if not allow_same_attribute and category in anc_categories:
+    for idx, q_text in enumerate(candidate_queries):
+        votes_mat = raw_votes_dict.get(q_text) if raw_votes_dict else None
+        consistency, unanimous_frac, high_agree_frac = compute_vote_consistency(votes_mat)
+        if unanimous_frac < min_unanimous_consistency or high_agree_frac < min_high_consistency:
             continue
 
-        column_key = f"Q{query_idx}"
-        split_mask = (answers_df[column_key].values == 1)
+        split_mask = answers_df[f"Q{idx}"].values == 1
+        gain, c_pos, c_neg = compute_split_gain(labels, split_mask, parent_entropy)
+        if min(c_pos, c_neg) < min_leaf_samples or gain < min_information_gain:
+            continue
 
-        # 2. Empirical correlation check against ancestor query answers
-        if ancestor_answers_df is not None and not ancestor_answers_df.empty:
-            cand_vec = split_mask.astype(float)
-            if np.std(cand_vec) > 1e-6:
-                is_redundant = False
-                for anc_col in ancestor_answers_df.columns:
-                    anc_vec = ancestor_answers_df[anc_col].values.astype(float)
-                    if np.std(anc_vec) > 1e-6:
-                        corr = abs(float(np.corrcoef(cand_vec, anc_vec)[0, 1]))
-                        if not np.isnan(corr) and corr > max_correlation:
-                            is_redundant = True
-                            break
-                if is_redundant:
-                    continue
-
-        gain, _, _ = compute_split_gain(labels, split_mask, parent_entropy)
-
-        if gain > best_gain:
-            best_gain = gain
-            best_query = query_text
-            best_mask = split_mask
-            best_category = category
-
-    if best_query is not None and best_gain >= min_information_gain:
-        return {
-            "query": best_query,
-            "information_gain": float(best_gain),
-            "split_mask": best_mask,
-            "category": best_category
-        }
-
-    return None
-
-
-def predict_single_instance(
-    graph: nx.DiGraph,
-    record_answers: pd.Series,
-    query_to_column: Dict[str, str]
-) -> Tuple[int, float]:
-    current_node = 0
-    while not graph.nodes[current_node]["is_leaf"]:
-        split_query = graph.nodes[current_node]["query"]
-        col_name = query_to_column[split_query]
-        actual_answer = int(record_answers[col_name])
-
-        next_node = None
-        for _, neighbor_id, edge_attrs in graph.out_edges(current_node, data=True):
-            if edge_attrs.get("branch") == actual_answer:
-                next_node = neighbor_id
-                break
-
-        if next_node is None:
-            return graph.nodes[current_node]["prediction"], graph.nodes[current_node]["prob"]
-        current_node = next_node
-
-    return graph.nodes[current_node]["prediction"], graph.nodes[current_node]["prob"]
+        score = gain * (consistency ** 2)
+        if score > best_score:
+            best_score = score
+            best_split = {
+                "query": q_text,
+                "information_gain": float(gain),
+                "consistency": float(consistency),
+                "split_mask": split_mask,
+                "category": classify_query(q_text),
+            }
+    return best_split
 
 
 class QueryDecisionTree:
-    """Unified Decision Tree estimator over Natural Language Queries."""
+    """Inductive Decision Tree estimator over Natural Language Queries."""
 
     def __init__(
         self,
-        regime: str = "local",
         n_subsets: int = 8,
         k_queries: int = 5,
         max_depth: int = 3,
         min_ig: float = 0.01,
-        task_type: str = "contextual",
         majority_votes: int = 1,
-        max_correlation: float = 0.85,
-        allow_same_attribute: bool = False
+        min_unanimous_consistency: float = 0.80,
+        min_high_consistency: float = 0.90,
+        min_error_reduction: int = 2,
     ):
-        self.regime = regime
         self.n_subsets = n_subsets
         self.k_queries = k_queries
         self.max_depth = max_depth
         self.min_ig = min_ig
-        self.task_type = task_type
         self.majority_votes = majority_votes
-        self.max_correlation = max_correlation
-        self.allow_same_attribute = allow_same_attribute
+        self.min_unanimous_consistency = min_unanimous_consistency
+        self.min_high_consistency = min_high_consistency
+        self.min_error_reduction = min_error_reduction
 
-        self.graph: Optional[nx.DiGraph] = None
-        self.global_clf: Optional[DecisionTreeClassifier] = None
+        self.nodes: Dict[int, Dict[str, Any]] = {}
         self.queries: List[str] = []
         self.splits: List[Dict[str, Any]] = []
 
+    def _add_leaf_node(self, node_id: int, depth: int, labels: np.ndarray) -> None:
+        n_samples = len(labels)
+        n_pos = int((labels == 1).sum()) if n_samples > 0 else 0
+        n_neg = n_samples - n_pos
+        self.nodes[node_id] = {
+            "is_leaf": True,
+            "depth": depth,
+            "n_samples": n_samples,
+            "n_pos": n_pos,
+            "n_neg": n_neg,
+            "prediction": int(n_pos >= n_neg),
+            "prob": float(n_pos / n_samples) if n_samples > 0 else 0.0,
+        }
+
+    def _prune_tree(self) -> None:
+        changed = True
+        while changed and len(self.nodes) > 1:
+            changed = False
+            internal = sorted(
+                [(nid, d.get("depth", 0)) for nid, d in self.nodes.items() if not d.get("is_leaf", True)],
+                key=lambda x: x[1],
+                reverse=True,
+            )
+            for nid, _ in internal:
+                parent = self.nodes.get(nid)
+                if not parent or parent.get("is_leaf", True):
+                    continue
+                c0, c1 = self.nodes.get(parent.get("yes_child")), self.nodes.get(parent.get("no_child"))
+                if c0 and c1 and c0.get("is_leaf", True) and c1.get("is_leaf", True):
+                    err_red = min(parent["n_pos"], parent["n_neg"]) - (min(c0["n_pos"], c0["n_neg"]) + min(c1["n_pos"], c1["n_neg"]))
+                    if c0["prediction"] == c1["prediction"] or err_red < self.min_error_reduction:
+                        self.nodes.pop(parent["yes_child"], None)
+                        self.nodes.pop(parent["no_child"], None)
+                        parent["is_leaf"] = True
+                        for k in ("query", "ig", "category", "consistency", "yes_child", "no_child"):
+                            parent.pop(k, None)
+                        changed = True
+
     def fit(self, train_df: pd.DataFrame, engine: FastVLLMEngine, seed: int = 42) -> "QueryDecisionTree":
         np.random.seed(seed)
-        if self.regime == "local":
-            self._fit_local(train_df, engine, base_seed=seed)
-        else:
-            self._fit_global(train_df, engine, seed=seed)
-        return self
-
-    def _fit_local(self, train_df: pd.DataFrame, engine: FastVLLMEngine, base_seed: int):
-        self.graph = nx.DiGraph()
-
-        # Root node
-        root_labels = train_df["target"].values
-        n_pos = int((root_labels == 1).sum())
-        n_neg = len(root_labels) - n_pos
-        self.graph.add_node(
-            0,
-            is_leaf=True,
-            depth=0,
-            n_samples=len(train_df),
-            n_pos=n_pos,
-            n_neg=n_neg,
-            prediction=int(n_pos >= n_neg),
-            prob=float(n_pos / len(train_df)) if len(train_df) > 0 else 0.0
-        )
-
-        current_level = [
-            {
-                "node_id": 0,
-                "sub_df": train_df,
-                "depth": 0,
-                "seed": base_seed,
-                "ancestors": []
-            }
-        ]
+        self.nodes = {}
+        self._add_leaf_node(0, depth=0, labels=train_df["target"].values)
+        current_level = [{"node_id": 0, "sub_df": train_df, "depth": 0, "seed": seed, "branch_history": []}]
 
         while current_level:
-            next_level = []
-            splittable_nodes = []
-
+            next_level, splittable = [], []
             for item in current_level:
-                sub_df = item["sub_df"]
-                depth = item["depth"]
-                labels = sub_df["target"].values
-                n_samples = len(labels)
+                labels = item["sub_df"]["target"].values
                 n_pos = int((labels == 1).sum())
-                n_neg = n_samples - n_pos
-                entropy = compute_shannon_entropy(labels)
+                if (
+                    item["depth"] < self.max_depth
+                    and compute_shannon_entropy(labels) > 0.0
+                    and min(n_pos, len(labels) - n_pos) >= max(2, self.min_error_reduction)
+                ):
+                    splittable.append(item)
 
-                if depth >= self.max_depth or entropy == 0.0 or min(n_pos, n_neg) < 2:
-                    continue
-                splittable_nodes.append(item)
-
-            if not splittable_nodes:
+            if not splittable:
                 break
+            engine.generate_queries_for_nodes(splittable, n_subsets=self.n_subsets, k_queries=self.k_queries)
 
-            for item in splittable_nodes:
-                cands = engine.generate_queries(
-                    item["sub_df"],
-                    n_subsets=self.n_subsets,
-                    k_queries=self.k_queries,
-                    seed=item["seed"] + 100 * item["depth"],
-                    exclude=item["ancestors"],
-                    ancestor_queries=item["ancestors"]
-                )
-                item["candidates"] = cands
-
-            for item in splittable_nodes:
-                node_id = item["node_id"]
-                sub_df = item["sub_df"]
+            for item in splittable:
+                node_id, sub_df, branch_history = item["node_id"], item["sub_df"], item["branch_history"]
                 labels = sub_df["target"].values
-                candidates = item.get("candidates", [])
-                ancestors = item["ancestors"]
+                candidates = [q for q in item.get("candidates", []) if is_logically_consistent_with_branch(q, branch_history)]
                 if not candidates:
                     continue
 
-                sub_texts = sub_df["text"].tolist()
-                ans_df = engine.answer_queries_cached(
-                    sub_texts,
-                    candidates,
-                    cache_key_prefix=f"train_node_{node_id}",
-                    majority_votes=self.majority_votes
-                )
-
-                anc_ans_df = None
-                if ancestors:
-                    anc_ans_df = engine.answer_queries_cached(
-                        sub_texts,
-                        ancestors,
-                        cache_key_prefix=f"train_node_{node_id}_anc",
-                        majority_votes=self.majority_votes
-                    )
-
+                texts = sub_df["text"].tolist()
+                ans_df = engine.answer_queries_cached(texts, candidates, majority_votes=self.majority_votes)
+                raw_votes = {q: engine.get_votes_matrix(texts, q, self.majority_votes) for q in candidates}
                 split_info = find_optimal_split_query(
-                    candidate_queries=candidates,
-                    answers_df=ans_df,
-                    labels=labels,
-                    min_information_gain=self.min_ig,
-                    task_type=self.task_type,
-                    ancestor_queries=ancestors,
-                    ancestor_answers_df=anc_ans_df,
-                    max_correlation=self.max_correlation,
-                    allow_same_attribute=self.allow_same_attribute
+                    candidates, ans_df, labels, self.min_ig, raw_votes, self.min_unanimous_consistency, self.min_high_consistency
                 )
 
                 if split_info is not None:
-                    chosen_query = split_info["query"]
-                    split_mask = split_info["split_mask"]
-
-                    self.graph.nodes[node_id].update(
-                        is_leaf=False,
-                        query=chosen_query,
-                        ig=split_info["information_gain"],
-                        category=split_info["category"]
+                    q_chosen, mask = split_info["query"], split_info["split_mask"]
+                    self.nodes[node_id].update(
+                        is_leaf=False, query=q_chosen, ig=split_info["information_gain"],
+                        category=split_info["category"], consistency=split_info["consistency"],
                     )
-
-                    yes_subset = sub_df[split_mask].copy()
-                    no_subset = sub_df[~split_mask].copy()
-                    updated_ancestors = ancestors + [chosen_query]
-
-                    left_id = len(self.graph)
-                    l_labels = yes_subset["target"].values
-                    l_pos = int((l_labels == 1).sum()) if len(l_labels) > 0 else 0
-                    l_neg = len(l_labels) - l_pos
-                    self.graph.add_edge(node_id, left_id, branch=1)
-                    self.graph.add_node(
-                        left_id,
-                        is_leaf=True,
-                        depth=item["depth"] + 1,
-                        n_samples=len(l_labels),
-                        n_pos=l_pos,
-                        n_neg=l_neg,
-                        prediction=int(l_pos >= l_neg),
-                        prob=float(l_pos / len(l_labels)) if len(l_labels) > 0 else 0.0
-                    )
-                    next_level.append({
-                        "node_id": left_id,
-                        "sub_df": yes_subset,
-                        "depth": item["depth"] + 1,
-                        "seed": item["seed"] + 1,
-                        "ancestors": updated_ancestors
-                    })
-
-                    right_id = len(self.graph)
-                    r_labels = no_subset["target"].values
-                    r_pos = int((r_labels == 1).sum()) if len(r_labels) > 0 else 0
-                    r_neg = len(r_labels) - r_pos
-                    self.graph.add_edge(node_id, right_id, branch=0)
-                    self.graph.add_node(
-                        right_id,
-                        is_leaf=True,
-                        depth=item["depth"] + 1,
-                        n_samples=len(r_labels),
-                        n_pos=r_pos,
-                        n_neg=r_neg,
-                        prediction=int(r_pos >= r_neg),
-                        prob=float(r_pos / len(r_labels)) if len(r_labels) > 0 else 0.0
-                    )
-                    next_level.append({
-                        "node_id": right_id,
-                        "sub_df": no_subset,
-                        "depth": item["depth"] + 1,
-                        "seed": item["seed"] + 2,
-                        "ancestors": updated_ancestors
-                    })
-
+                    for branch_val, edge_key, child_df, offset in (
+                        (1, "yes_child", sub_df[mask].copy(), 1),
+                        (0, "no_child", sub_df[~mask].copy(), 2),
+                    ):
+                        child_id = max(self.nodes) + 1
+                        self.nodes[node_id][edge_key] = child_id
+                        self._add_leaf_node(child_id, depth=item["depth"] + 1, labels=child_df["target"].values)
+                        next_level.append({
+                            "node_id": child_id, "sub_df": child_df, "depth": item["depth"] + 1,
+                            "seed": item["seed"] + offset, "branch_history": branch_history + [(q_chosen, branch_val)],
+                        })
             current_level = next_level
 
-        self.queries = list(dict.fromkeys(
-            data["query"]
-            for _, data in self.graph.nodes(data=True)
-            if not data["is_leaf"]
-        ))
-        self.splits = [
-            {
-                "depth": data["depth"],
-                "query": data["query"],
-                "category": data["category"],
-                "ig": data["ig"]
-            }
-            for _, data in self.graph.nodes(data=True)
-            if not data["is_leaf"]
-        ]
-
-    def _fit_global(self, train_df: pd.DataFrame, engine: FastVLLMEngine, seed: int):
-        self.queries = engine.generate_queries(train_df, self.n_subsets, self.k_queries, seed=seed)
-        ans_df = engine.answer_queries_cached(
-            train_df["text"].tolist(), 
-            self.queries, 
-            cache_key_prefix="train",
-            majority_votes=self.majority_votes
-        )
-
-        self.global_clf = DecisionTreeClassifier(max_depth=self.max_depth, random_state=seed)
-        self.global_clf.fit(ans_df.values, train_df["target"].values)
-
-        importances = self.global_clf.feature_importances_
-        used_indices = np.where(importances > 0.0)[0]
-        self.splits = [
-            {
-                "depth": 0,
-                "query": self.queries[idx],
-                "category": classify_query(self.queries[idx], self.task_type),
-                "importance": float(importances[idx])
-            }
-            for idx in used_indices
-        ]
+        self._prune_tree()
+        internal = [d for _, d in sorted(self.nodes.items(), key=lambda x: (x[1]["depth"], x[0])) if not d["is_leaf"]]
+        self.queries = list(dict.fromkeys(d["query"] for d in internal))
+        self.splits = [{k: d[k] for k in ("depth", "query", "category", "ig", "consistency")} for d in internal]
+        return self
 
     def predict(self, test_df: pd.DataFrame, engine: FastVLLMEngine) -> Tuple[np.ndarray, np.ndarray]:
-        if not self.queries:
-            fallback_pred = self.graph.nodes[0]["prediction"] if (self.graph and len(self.graph)) else 0
-            fallback_prob = self.graph.nodes[0]["prob"] if (self.graph and len(self.graph)) else 0.0
-            return np.full(len(test_df), fallback_pred), np.full(len(test_df), fallback_prob)
+        n = len(test_df)
+        if not self.queries or not self.nodes:
+            return np.full(n, self.nodes[0]["prediction"] if self.nodes else 0), np.full(n, self.nodes[0]["prob"] if self.nodes else 0.0)
 
-        ans_df = engine.answer_queries_cached(
-            test_df["text"].tolist(), 
-            self.queries, 
-            cache_key_prefix="test",
-            majority_votes=self.majority_votes
-        )
+        ans_mat = engine.answer_queries_cached(test_df["text"].tolist(), self.queries, majority_votes=self.majority_votes).values
+        q_to_col = {q: i for i, q in enumerate(self.queries)}
+        preds, probs = np.zeros(n, dtype=int), np.zeros(n, dtype=float)
 
-        if self.regime == "global":
-            y_pred = self.global_clf.predict(ans_df.values)
-            y_prob = self.global_clf.predict_proba(ans_df.values)[:, 1] if hasattr(self.global_clf, "predict_proba") else y_pred
-            return y_pred, y_prob
-
-        query_to_column = {q: f"Q{i}" for i, q in enumerate(self.queries)}
-        predictions, probabilities = [], []
-
-        for row_idx in range(len(ans_df)):
-            pred, prob = predict_single_instance(self.graph, ans_df.iloc[row_idx], query_to_column)
-            predictions.append(pred)
-            probabilities.append(prob)
-
-        return np.array(predictions), np.array(probabilities)
+        for i in range(n):
+            curr = 0
+            while curr in self.nodes and not self.nodes[curr]["is_leaf"]:
+                ans = int(ans_mat[i, q_to_col[self.nodes[curr]["query"]]])
+                nxt = self.nodes[curr].get("yes_child" if ans == 1 else "no_child")
+                if nxt is None or nxt not in self.nodes:
+                    break
+                curr = nxt
+            leaf = self.nodes.get(curr, self.nodes[0])
+            preds[i], probs[i] = leaf["prediction"], leaf["prob"]
+        return preds, probs
 
     def evaluate(self, test_df: pd.DataFrame, engine: FastVLLMEngine) -> Dict[str, Any]:
         y_pred, y_prob = self.predict(test_df, engine)
-        metrics = compute_metrics(
-            y_true=test_df["target"].values,
-            y_pred=y_pred,
-            y_prob=y_prob,
-            splits=self.splits,
-            task_type=self.task_type
-        )
-        metrics["splits_analysis"] = self.splits
-        return metrics
+        return compute_metrics(test_df["target"].values, y_pred, y_prob, splits=self.splits)
 
     def to_mermaid(self) -> str:
-        if not self.graph or len(self.graph) == 0:
+        if not self.nodes:
             return "graph TD\nN0[Empty Tree]"
-
-        mermaid_lines = []
-        for node_id, data in self.graph.nodes(data=True):
-            if data["is_leaf"]:
-                mermaid_lines.append(
-                    f'N{node_id}["Class: {data["prediction"]}<br/>'
-                    f'(Pos={data["n_pos"]}, Neg={data["n_neg"]})"]:::leaf'
-                )
+        lines = []
+        for nid, d in sorted(self.nodes.items()):
+            if d["is_leaf"]:
+                lines.append(f'N{nid}["Class: {d["prediction"]}<br/>(Pos={d["n_pos"]}, Neg={d["n_neg"]})"]:::leaf')
             else:
-                cat_tag = f'[{data["category"]}] ' if data.get("category") else ""
-                clean_q = data["query"].replace('"', "'").splitlines()[0].strip()
-                mermaid_lines.append(
-                    f'N{node_id}["{cat_tag}{clean_q}<br/>'
-                    f'IG: {data["ig"]:.3f} | N={data["n_samples"]}"]'
-                )
-
-        for u, v, edge_data in self.graph.edges(data=True):
-            branch_val = edge_data.get("branch", 0)
-            branch_label = "Yes" if branch_val == 1 else "No"
-            mermaid_lines.append(f"N{u} -->|{branch_label}| N{v}")
-
-        return "\n".join(mermaid_lines)
-
-
-
+                q_clean = d["query"].replace('"', "'").splitlines()[0].strip()
+                lines.append(f'N{nid}["[{d["category"]}] {q_clean}<br/>IG: {d["ig"]:.3f} | N={d["n_samples"]}"]')
+        for nid, d in sorted(self.nodes.items()):
+            if not d["is_leaf"]:
+                if "yes_child" in d:
+                    lines.append(f'N{nid} -->|Yes| N{d["yes_child"]}')
+                if "no_child" in d:
+                    lines.append(f'N{nid} -->|No| N{d["no_child"]}')
+        return "\n".join(lines)

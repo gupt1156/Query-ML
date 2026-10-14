@@ -6,23 +6,18 @@ Active hypothesis generation and interpretable decision-tree induction using Lar
 
 ## Repository Structure
 
-```
-Query-ML/
-├── run.py                 # CLI experiment orchestrator & multi-seed evaluation
-├── run_experiment.slurm   # SLURM batch job script for GPU cluster execution
-├── environment.yml        # Conda environment specification
-├── requirements.txt       # Python package dependencies
-├── src/
-│   ├── __init__.py        # Package exports
-│   ├── dataset.py         # Dataset loaders, text formatters, and ground-truth rules
-│   ├── evaluate.py        # Evaluation metrics (Accuracy, ROC-AUC, Causal Recovery)
-│   ├── generator.py       # vLLM inference engine, batch prompting, and caching
-│   ├── prompts.py         # Domain-agnostic query generation and verification prompts
-│   ├── reliability.py     # Self-consistency and query verification tests
-│   └── tree.py            # Decision tree induction, Shannon entropy, and visualization
-├── data/                  # Benchmark datasets (Admissions, Deceptive Reviews)
-└── docs/                  # Research paper and reference notes
-```
+| File / Directory | Description |
+| :--- | :--- |
+| `run.py` | Multi-seed inductive decision tree runner (`QueryDecisionTree`) |
+| `evaluate_small_llms.py` | Benchmark suite for sub-$7\text{B}$ and $7\text{B}$ LLMs (Direct vs. Tree-Guided, Simplicity Audit, Speedups) |
+| `generate_pre_meeting_figures.py` | Summary JSON and publication-quality figure generator |
+| `run_experiment.slurm` | SLURM GPU array job script for 50-seed tree induction |
+| `run_small_llms.slurm` | SLURM GPU array job script for evaluating small LLMs |
+| `src/__init__.py` | Package exports |
+| `src/generator.py` | Domain-agnostic prompt builders, `FastVLLMEngine`, batching, and vote caching |
+| `src/tree.py` | Inductive decision tree (`QueryDecisionTree`), consistency gating, and bottom-up pruning |
+| `src/utils.py` | Semantic query parsing, sanitization, vote consistency math, dataset loader, and metrics |
+| `data/` | Benchmark datasets (`admission_train.json`, `admission_val.json`, `admission_test.json`) |
 
 ---
 
@@ -51,38 +46,27 @@ conda activate query-ml
 pip install -r requirements.txt
 ```
 
-### 2. Model Weights & Cache
-
-By default, Query-ML uses [`Qwen/Qwen2.5-7B-Instruct`](https://huggingface.co/Qwen/Qwen2.5-7B-Instruct).
-- On the first run, vLLM will automatically download the model weights (~15GB) into your Hugging Face cache directory (`$HF_HOME`, defaulting to `~/.cache/huggingface` or `/scratch/${USER}/.cache/huggingface`).
-- If you already have model weights downloaded locally, you can specify them via `--model_name /path/to/model/checkpoint`.
-
-### 3. Running Local Experiments
-
-Run the contextual benchmark across seeds:
+### 2. Running Experiments
 
 ```bash
-# Contextual Admissions Benchmark
-python run.py --task_type contextual --seeds 42,52,62 --regimes local global
+# Multi-seed tree induction (5-vote majority voting)
+python run.py --seeds 42,52,62 --majority_votes 5 --output_dir results/vllm_regimes_maj5_final
 
-# Original Admissions Benchmark
-python run.py --task_type original --seeds 42,52,62 --min_ig 1e-5
+# Evaluate a small LLM (Direct vs. Tree-Guided, Query Audit, and Speedups)
+python evaluate_small_llms.py --model_name Qwen/Qwen2.5-1.5B-Instruct --output_file results/small_llm_eval/eval_qwen25_1_5b.json
+
+# Generate summary statistics and figures
+python generate_pre_meeting_figures.py
 ```
 
 ---
 
 ## HPC & Cluster Execution (SLURM)
 
-To submit array jobs to an HPC cluster (e.g., NYU Torch / Greene with NVIDIA L40S GPUs):
-
 ```bash
+# 50-seed tree induction across 5 GPU array tasks
 sbatch run_experiment.slurm
+
+# Benchmark 5 small LLMs + 7B reference across 6 GPU array tasks
+sbatch run_small_llms.slurm
 ```
-
-To run with a custom model or local weights:
-
-```bash
-MODEL_NAME="/path/to/custom/weights" sbatch run_experiment.slurm
-```
-
-Logs will be saved to `logs/` and experiment checkpoints to `results/`.
